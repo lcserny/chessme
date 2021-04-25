@@ -1,5 +1,5 @@
-/dist/
-/.idea/
+**/dist
+**/.idea
 *.iml
-/node_modules/
-/src/*.js
+**/node_modules
+src/**/*.js
