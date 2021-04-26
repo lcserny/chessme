@@ -99,3 +99,12 @@ describe("game players", function () {
         expect(error.name).equals("SamePlayerTeamError");
     });
 });
+
+describe("game board", function () {
+    it("every new game starts with a empty board", function () {
+        let game = new ChessMeGame();
+        let board = game.board()
+
+        expect(board.positions.length).equals(0);
+    });
+});

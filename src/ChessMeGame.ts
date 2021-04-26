@@ -1,5 +1,6 @@
 import {Player} from "./Player";
 import {GameStatusError, NoPlayersError, SamePlayerTeamError, TooManyPlayersError} from "./errors";
+import {Board} from "./Board";
 
 enum GameStatus {
     STARTED = "started",
@@ -9,13 +10,20 @@ enum GameStatus {
 
 export class ChessMeGame {
 
+    private readonly _board: Board;
+
     private _status: GameStatus;
     private _players: Array<Player>;
 
     constructor(players?: Array<Player>) {
+        this._board = new Board();
         this._status = GameStatus.PENDING;
         this._players = players == null ? new Array<Player>() : players;
         this.checkPlayerTeams();
+    }
+
+    board(): Board {
+        return this._board;
     }
 
     join(player: Player): void {
