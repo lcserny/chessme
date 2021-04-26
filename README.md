@@ -15,7 +15,11 @@ yarn build
 to bundle your application
 
 ### TODO
-- use webpack server to CI dev work
-- add testing framework and use TDD to dev
-- no UI needed at first, make it a console game
-- later on move to UI elements in Canvas
+- use webpack server to auto-refresh dev work
+  
+### Roadmap
+1. no UI needed, console game, draw chess board on each new command in console
+2. later on allow commands given from outside 
+3. game will need to be converted to a grpc server and allow commands as grpc requests
+4. game will need to persist data in mongodb
+5. after all this, Android clients can be made to play
