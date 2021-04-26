@@ -18,7 +18,7 @@ to bundle your application
 - use webpack server to auto-refresh dev work
   
 ### Roadmap
-1. no UI needed, console game, draw chess board on each new command in console
+1. no UI needed, console game, return each chess board position occupation and game status
 2. later on allow commands given from outside 
 3. game will need to be converted to a grpc server and allow commands as grpc requests
 4. game will need to persist data in mongodb
