@@ -11,10 +11,13 @@ export class Player {
     private readonly _color: PlayerColor;
     private readonly _moves: Array<Move>;
 
+    private _canMove: boolean;
+
     constructor(name: string, color: PlayerColor) {
         this._name = name;
         this._moves = new Array<Move>();
         this._color = color;
+        this._canMove = color == PlayerColor.WHITE;
     }
 
     get color(): PlayerColor {
@@ -29,7 +32,12 @@ export class Player {
         return this._name;
     }
 
+    get canMove(): boolean {
+        return this._canMove;
+    }
+
     addMove(move: Move): void {
         this._moves.push(move);
+        this._canMove = !this._canMove;
     }
 }

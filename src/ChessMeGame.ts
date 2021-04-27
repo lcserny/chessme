@@ -1,7 +1,8 @@
 import {Player} from "./Player";
 import {
     GameStatusError,
-    NoPlayersError, PlayerNameExistsError,
+    NoPlayersError,
+    PlayerNameExistsError,
     PlayerNotInGameError,
     SamePlayerTeamError,
     TooManyPlayersError
@@ -63,7 +64,7 @@ export class ChessMeGame {
 
     move(player: Player, move: Move): Outcome {
         this.checkPlayerIsPlaying(player);
-        if (this._board.isMoveAllowed(move)) {
+        if (player.canMove && this._board.isMoveAllowed(move)) {
             player.addMove(move);
             return this._board.calculateOutcome(move);
         }
