@@ -1,23 +1,45 @@
 import {Piece} from "./Piece";
 
+export enum Row {
+    ONE,
+    TWO,
+    THREE,
+    FOUR,
+    FIVE,
+    SIX,
+    SEVEN,
+    EIGHT
+}
+
+export enum Col {
+    A,
+    B,
+    C,
+    D,
+    E,
+    F,
+    G,
+    H
+}
+
 export class Position {
 
-    private readonly _row: string;
-    private readonly _col: string;
+    private readonly _row: Row;
+    private readonly _col: Col;
 
     private _piece: Piece;
 
-    constructor(row: string, col: string, piece?: Piece) {
+    constructor(row: Row, col: Col, piece?: Piece) {
         this._row = row;
         this._col = col;
         this._piece = piece;
     }
 
-    get row(): string {
+    get row(): Row {
         return this._row;
     }
 
-    get col(): string {
+    get col(): Col {
         return this._col;
     }
 
@@ -27,5 +49,9 @@ export class Position {
 
     set piece(value: Piece) {
         this._piece = value;
+    }
+
+    hasPiece(): boolean {
+        return this._piece != null;
     }
 }

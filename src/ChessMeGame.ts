@@ -15,8 +15,8 @@ export class ChessMeGame {
     private _status: GameStatus;
     private _players: Array<Player>;
 
-    constructor(players?: Array<Player>) {
-        this._board = new Board();
+    constructor(board: Board, players?: Array<Player>) {
+        this._board = board;
         this._status = GameStatus.PENDING;
         this._players = players == null ? new Array<Player>() : players;
         this.checkPlayerTeams();
