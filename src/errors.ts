@@ -25,3 +25,17 @@ export class SamePlayerTeamError extends Error {
         this.name = "SamePlayerTeamError";
     }
 }
+
+export class PlayerNotInGameError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = "PlayerNotInGameError";
+    }
+}
+
+export class PlayerNameExistsError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = "PlayerNameExistsError";
+    }
+}

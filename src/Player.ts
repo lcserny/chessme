@@ -1,6 +1,4 @@
 import {Move} from "./Move";
-import {NotAllowed, Outcome} from "./Outcome";
-import {Board} from "./Board";
 
 export enum PlayerColor {
     WHITE = "white",
@@ -9,14 +7,14 @@ export enum PlayerColor {
 
 export class Player {
 
+    private readonly _name: string;
     private readonly _color: PlayerColor;
-    private readonly _board: Board;
+    private readonly _moves: Array<Move>;
 
-    private _moves: Array<Move> = new Array<Move>();
-
-    constructor(color: PlayerColor, board: Board) {
+    constructor(name: string, color: PlayerColor) {
+        this._name = name;
+        this._moves = new Array<Move>();
         this._color = color;
-        this._board = board;
     }
 
     get color(): PlayerColor {
@@ -27,15 +25,11 @@ export class Player {
         return this._moves;
     }
 
-    get board(): Board {
-        return this._board;
+    get name(): string {
+        return this._name;
     }
 
-    move(move: Move): Outcome {
-        if (this.board.isMoveAllowed(move)) {
-            this._moves.push(move);
-            return this.board.calculateOutcome(move);
-        }
-        return new NotAllowed();
+    addMove(move: Move): void {
+        this._moves.push(move);
     }
 }

@@ -6,11 +6,12 @@ import {Move} from "./Move";
 export class Board {
 
     private readonly _outcomeEngine: OutcomeEngine;
-
-    private _positions: Array<Position> = new Array<Position>();
+    private readonly _positions: Array<Position>;
 
     constructor(outcomeEngine?: OutcomeEngine) {
+        this._positions = new Array<Position>();
         this._outcomeEngine = outcomeEngine == null ? new SimpleOutcomeEngine() : outcomeEngine;
+        this.initPositions();
     }
 
     get positions(): Array<Position> {
@@ -25,6 +26,10 @@ export class Board {
         let outcome = this._outcomeEngine.calculateOutcome(this.positions, move);
         this.refreshPositions(outcome);
         return outcome;
+    }
+
+    private initPositions(): void {
+        // TODO
     }
 
     private refreshPositions(outcome: Outcome): void {

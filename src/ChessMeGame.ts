@@ -1,6 +1,14 @@
 import {Player} from "./Player";
-import {GameStatusError, NoPlayersError, SamePlayerTeamError, TooManyPlayersError} from "./errors";
+import {
+    GameStatusError,
+    NoPlayersError, PlayerNameExistsError,
+    PlayerNotInGameError,
+    SamePlayerTeamError,
+    TooManyPlayersError
+} from "./errors";
 import {Board} from "./Board";
+import {NotAllowed, Outcome} from "./Outcome";
+import {Move} from "./Move";
 
 enum GameStatus {
     STARTED = "started",
@@ -11,22 +19,20 @@ enum GameStatus {
 export class ChessMeGame {
 
     private readonly _board: Board;
+    private readonly _players: Array<Player>;
 
     private _status: GameStatus;
-    private _players: Array<Player>;
 
     constructor(board: Board, players?: Array<Player>) {
         this._board = board;
         this._status = GameStatus.PENDING;
         this._players = players == null ? new Array<Player>() : players;
+
         this.checkPlayerTeams();
     }
 
-    board(): Board {
-        return this._board;
-    }
-
     join(player: Player): void {
+        this.checkPlayerNameExists(player);
         if (this._players.length == 2) {
             throw new TooManyPlayersError("Cannot join game, two players already present");
         }
@@ -53,6 +59,38 @@ export class ChessMeGame {
 
     status(): string {
         return this._status.valueOf()
+    }
+
+    move(player: Player, move: Move): Outcome {
+        this.checkPlayerIsPlaying(player);
+        if (this._board.isMoveAllowed(move)) {
+            player.addMove(move);
+            return this._board.calculateOutcome(move);
+        }
+        return new NotAllowed();
+    }
+
+    private checkPlayerNameExists(player: Player): void {
+        for (let i = 0; i < this._players.length; i++) {
+            let pl = this._players[i];
+            if (pl.name == player.name) {
+                throw new PlayerNameExistsError("Player name already taken");
+            }
+        }
+    }
+
+    private checkPlayerIsPlaying(player: Player): void {
+        let playerIsPlaying: boolean = false;
+        for (let i = 0; i < this._players.length; i++) {
+            let pl = this._players[i];
+            if (pl.name == player.name) {
+                playerIsPlaying = true;
+                break
+            }
+        }
+        if (!playerIsPlaying) {
+            throw new PlayerNotInGameError("Player passed has not joined the game");
+        }
     }
 
     private checkPlayerTeams(): void {
