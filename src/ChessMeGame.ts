@@ -1,4 +1,4 @@
-import {Player} from "./Player";
+import {Player, PlayerColor} from "./Player";
 import {
     GameStatusError,
     NoPlayersError,
@@ -23,6 +23,7 @@ export class ChessMeGame {
     private readonly _players: Array<Player>;
 
     private _status: GameStatus;
+    private _playerToMove: Player;
 
     constructor(board: Board, players?: Array<Player>) {
         this._board = board;
@@ -64,8 +65,9 @@ export class ChessMeGame {
 
     move(player: Player, move: Move): Outcome {
         this.checkPlayerIsPlaying(player);
-        if (player.canMove && this._board.isMoveAllowed(move)) {
+        if (this._playerToMove == player && this._board.isMoveAllowed(move)) {
             player.addMove(move);
+            this.switchPlayerToMove(player);
             return this._board.calculateOutcome(move);
         }
         return new NotAllowed();
@@ -82,8 +84,7 @@ export class ChessMeGame {
 
     private checkPlayerIsPlaying(player: Player): void {
         let playerIsPlaying: boolean = false;
-        for (let i = 0; i < this._players.length; i++) {
-            let pl = this._players[i];
+        for (let pl of this._players) {
             if (pl.name == player.name) {
                 playerIsPlaying = true;
                 break
@@ -94,10 +95,25 @@ export class ChessMeGame {
         }
     }
 
+    private switchPlayerToMove(player: Player): void {
+        for (let pl of this._players) {
+            if (player.name != pl.name) {
+                this._playerToMove = pl;
+                break
+            }
+        }
+    }
+
     private checkPlayerTeams(): void {
         if (this._players.length == 2) {
             if (this._players[0].color == this._players[1].color) {
                 throw new SamePlayerTeamError("Both players joining the game cannot be of same color");
+            }
+            for (let player of this._players) {
+                if (player.color == PlayerColor.WHITE) {
+                    this._playerToMove = player;
+                    break
+                }
             }
         }
     }
