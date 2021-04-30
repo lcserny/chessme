@@ -3,6 +3,9 @@ import {describe, it} from "mocha";
 import {ChessMeGame} from "../src/ChessMeGame";
 import {Player, PlayerColor} from "../src/Player";
 import {Board} from "../src/Board";
+import {Move} from "../src/Move";
+import {Col, Position, Row} from "../src/Position";
+import {GameStatusError} from "../src/errors";
 
 describe("game statuses", function () {
     let board = new Board();
@@ -12,7 +15,7 @@ describe("game statuses", function () {
 
     it("new games have pending status", function () {
         let game = new ChessMeGame(board);
-        expect(game.status()).contains("pending");
+        expect(game.status.valueOf()).equals("pending");
     });
 
     it("game can be started", function () {
@@ -20,7 +23,7 @@ describe("game statuses", function () {
 
         game.start();
 
-        expect(game.status()).contains("start");
+        expect(game.status.valueOf()).contains("start");
     });
 
     it("game can be stopped", function () {
@@ -29,7 +32,7 @@ describe("game statuses", function () {
         game.start();
         game.stop();
 
-        expect(game.status()).contains("stop");
+        expect(game.status.valueOf()).contains("stop");
     });
 
     it("game can be started only once", function () {
@@ -117,12 +120,46 @@ describe("game players", function () {
         expect(error.name).equals("PlayerNameExistsError");
     });
 
-    it("game throws error when trying to make not-joined player move", function () {
-        // TODO
+    it("game throws error when executing move if not started", function () {
+        let game = new ChessMeGame(new Board());
+        let player = new Player("a", PlayerColor.WHITE);
+        let move = new Move(new Position(Row.ONE, Col.A), new Position(Row.TWO, Col.A));
+
+        let error = new Error();
+        try {
+            game.move(player, move);
+        } catch (e) {
+            error = e;
+        }
+        expect(error.name).equals("GameStatusError");
     });
 
-    it("game can make move for player", function () {
-        // TODO
-        // assert.notEqual(outcome, null);
+    it("game throws error when executing move of unknown player", function () {
+        let player1 = new Player("a", PlayerColor.WHITE);
+        let player2 = new Player("b", PlayerColor.BLACK);
+        let player3 = new Player("c", PlayerColor.WHITE);
+        let game = new ChessMeGame(new Board(), new Array<Player>(player2, player1));
+        let move = new Move(new Position(Row.ONE, Col.A), new Position(Row.TWO, Col.A));
+        game.start()
+
+        let error = new Error();
+        try {
+            game.move(player3, move);
+        } catch (e) {
+            error = e;
+        }
+        expect(error.name).equals("PlayerNotInGameError");
+    });
+
+    it("game executes move for player", function () {
+        let player1 = new Player("a", PlayerColor.WHITE);
+        let player2 = new Player("b", PlayerColor.BLACK);
+        let game = new ChessMeGame(new Board(), new Array<Player>(player2, player1));
+        let move = new Move(new Position(Row.ONE, Col.A), new Position(Row.TWO, Col.A));
+        game.start()
+
+        let outcome = game.move(player1, move);
+
+        assert.notEqual(outcome, null);
     });
 });

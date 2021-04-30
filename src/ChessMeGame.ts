@@ -59,13 +59,18 @@ export class ChessMeGame {
         this._status = GameStatus.STOPPED
     }
 
-    status(): string {
-        return this._status.valueOf()
+    get status(): string {
+        return this._status;
     }
 
     move(player: Player, move: Move): Outcome {
+        if (this.status != GameStatus.STARTED) {
+            throw new GameStatusError("Game not started, cannot move");
+        }
+
         this.checkPlayerIsPlaying(player);
-        if (this._playerToMove == player && this._board.isMoveAllowed(move)) {
+        if (this._playerToMove != null && this._playerToMove.name == player.name
+            && this._board.isMoveAllowed(move)) {
             player.addMove(move);
             this.switchPlayerToMove(player);
             return this._board.calculateOutcome(move);
@@ -83,7 +88,7 @@ export class ChessMeGame {
     }
 
     private checkPlayerIsPlaying(player: Player): void {
-        let playerIsPlaying: boolean = false;
+        let playerIsPlaying = false;
         for (let pl of this._players) {
             if (pl.name == player.name) {
                 playerIsPlaying = true;
