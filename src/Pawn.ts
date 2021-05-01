@@ -12,27 +12,26 @@ export class Pawn extends Piece {
         let moves = new Array<Location>();
 
         let aboveOne = currentLocation.up();
-        if (positions.getPosition(aboveOne) == null || !positions.getPosition(aboveOne).hasPiece()) {
+        let aboveOnePos = positions.getPosition(aboveOne);
+        if (aboveOnePos == null || !aboveOnePos.hasPiece()) {
             moves.push(aboveOne);
         }
 
         let aboveTwo = aboveOne.up();
-        if (currentLocation.row == Row.TWO
-            && (positions.getPosition(aboveTwo) == null || !positions.getPosition(aboveTwo).hasPiece())) {
+        let aboveTwoPos = positions.getPosition(aboveTwo);
+        if (currentLocation.row == Row.TWO && (aboveTwoPos == null || !aboveTwoPos.hasPiece())) {
             moves.push(aboveTwo);
         }
 
         let aboveLeft = aboveOne.left();
-        if (positions.getPosition(aboveLeft) != null
-            && positions.getPosition(aboveLeft).hasPiece()
-            && positions.getPosition(aboveLeft).piece.playerColor != this.playerColor) {
+        let aboveLeftPos = positions.getPosition(aboveLeft);
+        if (aboveLeftPos != null && aboveLeftPos.hasPiece() && aboveLeftPos.piece.playerColor != this.playerColor) {
             moves.push(aboveLeft);
         }
 
         let aboveRight = aboveOne.right();
-        if (positions.getPosition(aboveRight) != null
-            && positions.getPosition(aboveRight).hasPiece()
-            && positions.getPosition(aboveRight).piece.playerColor != this.playerColor) {
+        let aboveRightPos = positions.getPosition(aboveRight);
+        if (aboveRightPos != null && aboveRightPos.hasPiece() && aboveRightPos.piece.playerColor != this.playerColor) {
             moves.push(aboveRight);
         }
 
