@@ -81,4 +81,11 @@ describe("board setup", function () {
         let sevenH = positions.getPiece(Row.SEVEN, Col.H);
         expect(sevenH instanceof Pawn && sevenH.playerColor == PlayerColor.BLACK).to.be.true;
     });
+
+    it("new boards don't have any defeated pieces", function () {
+        let board = new Board();
+        let defeatedPieces = board.defeatedPieces;
+
+        expect(defeatedPieces.length).equals(0);
+    });
 });
