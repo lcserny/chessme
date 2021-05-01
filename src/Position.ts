@@ -1,4 +1,4 @@
-import {NoPiece, Piece} from "./Piece";
+import {Piece} from "./Piece";
 import {Rook} from "./Rook";
 import {PlayerColor} from "./Player";
 import {Knight} from "./Knight";
@@ -39,7 +39,7 @@ export class Position {
     constructor(row: Row, col: Col, piece?: Piece) {
         this._row = row;
         this._col = col;
-        this._piece = piece == null ? new NoPiece() : piece;
+        this._piece = piece;
     }
 
     get row(): Row {
@@ -59,7 +59,7 @@ export class Position {
     }
 
     hasPiece(): boolean {
-        return !(this._piece instanceof NoPiece);
+        return this._piece != null;
     }
 }
 
@@ -125,12 +125,12 @@ export class Positions {
         }
     }
 
-    getPiece(row: Row, col: Col): Piece {
+    getPosition(row: Row, col: Col): Position | null {
         for (let position of this._positions) {
-            if (position.row == row && position.col == col && position.hasPiece()) {
-                return position.piece;
+            if (position.row == row && position.col == col) {
+                return position;
             }
         }
-        return new NoPiece();
+        return null;
     }
 }

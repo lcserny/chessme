@@ -1,6 +1,6 @@
 import {PlayerColor} from "./Player";
 
-export class Piece {
+export abstract class Piece {
 
     private readonly _playerColor: PlayerColor;
 
@@ -10,12 +10,5 @@ export class Piece {
 
     get playerColor(): PlayerColor {
         return this._playerColor;
-    }
-}
-
-export class NoPiece extends Piece {
-
-    constructor() {
-        super(null);
     }
 }

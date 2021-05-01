@@ -35,6 +35,9 @@ export class Board {
     }
 
     private updateBoard(outcome: Outcome): void {
-        // TODO: if outcome contains defeated piece, add it to the list and remove from positions
+        if (outcome.hasDefeatedPosition()) {
+            this.defeatedPieces.push(outcome.defeatedPosition.piece);
+            this.positions.removePosition(outcome.defeatedPosition);
+        }
     }
 }
