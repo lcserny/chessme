@@ -12,7 +12,7 @@ describe("player commands", function () {
 
     it("players can receive moves", function () {
         let player = new Player("p1", PlayerColor.WHITE);
-        let move = new Move(new Position(Location.from(Row.ONE, Col.A)), new Position(Location.from(Row.TWO, Col.A)));
+        let move = new Move(Location.from(Row.ONE, Col.A), Location.from(Row.TWO, Col.A));
         player.addMove(move);
         expect(player.moves.length).equals(1);
     });

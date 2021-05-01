@@ -169,22 +169,22 @@ export class Positions {
     }
 
     addPosition(position: Position) {
-        if (this.getPosition(position.location.row, position.location.col) == null) {
+        if (this.getPosition(position.location) == null) {
             this._positions.push(position);
         }
     }
 
     removePosition(position: Position) {
-        let foundPos = this.getPosition(position.location.row, position.location.col);
+        let foundPos = this.getPosition(position.location);
         if (foundPos != null) {
             let index = this._positions.indexOf(foundPos);
             this._positions.splice(index, 1);
         }
     }
 
-    getPosition(row: Row, col: Col): Position | null {
+    getPosition(location: Location): Position | null {
         for (let position of this._positions) {
-            if (position.location.row == row && position.location.col == col) {
+            if (position.location.row == location.row && position.location.col == location.col) {
                 return position;
             }
         }

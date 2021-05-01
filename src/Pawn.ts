@@ -4,6 +4,7 @@ import {Location} from "./Position";
 export class Pawn extends Piece {
 
     availableMoves(currentLocation: Location): Array<Location> {
-        return undefined;
+        // TODO
+        return new Array<Location>();
     }
 }

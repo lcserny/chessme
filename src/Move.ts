@@ -1,20 +1,20 @@
-import {Position} from "./Position";
+import {Location} from "./Position";
 
 export class Move {
 
-    private readonly _source: Position;
-    private readonly _target: Position;
+    private readonly _source: Location;
+    private readonly _target: Location;
 
-    constructor(source: Position, target: Position) {
+    constructor(source: Location, target: Location) {
         this._source = source;
         this._target = target;
     }
 
-    get source(): Position {
+    get source(): Location {
         return this._source;
     }
 
-    get target(): Position {
+    get target(): Location {
         return this._target;
     }
 }

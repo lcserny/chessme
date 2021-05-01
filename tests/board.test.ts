@@ -1,7 +1,7 @@
 import {expect} from "chai";
 import {describe, it} from "mocha";
 import {Board} from "../src/Board";
-import {Col, Positions, Row} from "../src/Position";
+import {Col, Positions, Location, Row} from "../src/Position";
 import {Pawn} from "../src/Pawn";
 import {Rook} from "../src/Rook";
 import {Knight} from "../src/Knight";
@@ -19,70 +19,70 @@ describe("board setup", function () {
         let board = new Board();
         let positions = board.positions;
 
-        let oneA = positions.getPosition(Row.ONE, Col.A);
+        let oneA = positions.getPosition(Location.from(Row.ONE, Col.A));
         expect(oneA.piece instanceof Rook && oneA.piece.playerColor == PlayerColor.WHITE).to.be.true;
-        let oneB = positions.getPosition(Row.ONE, Col.B);
+        let oneB = positions.getPosition(Location.from(Row.ONE, Col.B));
         expect(oneB.piece instanceof Knight && oneB.piece.playerColor == PlayerColor.WHITE).to.be.true;
-        let oneC = positions.getPosition(Row.ONE, Col.C);
+        let oneC = positions.getPosition(Location.from(Row.ONE, Col.C));
         expect(oneC.piece instanceof Bishop && oneC.piece.playerColor == PlayerColor.WHITE).to.be.true;
-        let oneD = positions.getPosition(Row.ONE, Col.D);
+        let oneD = positions.getPosition(Location.from(Row.ONE, Col.D));
         expect(oneD.piece instanceof Queen && oneD.piece.playerColor == PlayerColor.WHITE).to.be.true;
-        let oneE = positions.getPosition(Row.ONE, Col.E);
+        let oneE = positions.getPosition(Location.from(Row.ONE, Col.E));
         expect(oneE.piece instanceof King && oneE.piece.playerColor == PlayerColor.WHITE).to.be.true;
-        let oneF = positions.getPosition(Row.ONE, Col.F);
+        let oneF = positions.getPosition(Location.from(Row.ONE, Col.F));
         expect(oneF.piece instanceof Bishop && oneF.piece.playerColor == PlayerColor.WHITE).to.be.true;
-        let oneG = positions.getPosition(Row.ONE, Col.G);
+        let oneG = positions.getPosition(Location.from(Row.ONE, Col.G));
         expect(oneG.piece instanceof Knight && oneG.piece.playerColor == PlayerColor.WHITE).to.be.true;
-        let oneH = positions.getPosition(Row.ONE, Col.H);
+        let oneH = positions.getPosition(Location.from(Row.ONE, Col.H));
         expect(oneH.piece instanceof Rook && oneH.piece.playerColor == PlayerColor.WHITE).to.be.true;
-        let twoA = positions.getPosition(Row.TWO, Col.A);
+        let twoA = positions.getPosition(Location.from(Row.TWO, Col.A));
         expect(twoA.piece instanceof Pawn && twoA.piece.playerColor == PlayerColor.WHITE).to.be.true;
-        let twoB = positions.getPosition(Row.TWO, Col.B);
+        let twoB = positions.getPosition(Location.from(Row.TWO, Col.B));
         expect(twoB.piece instanceof Pawn && twoB.piece.playerColor == PlayerColor.WHITE).to.be.true;
-        let twoC = positions.getPosition(Row.TWO, Col.C);
+        let twoC = positions.getPosition(Location.from(Row.TWO, Col.C));
         expect(twoC.piece instanceof Pawn && twoC.piece.playerColor == PlayerColor.WHITE).to.be.true;
-        let twoD = positions.getPosition(Row.TWO, Col.D);
+        let twoD = positions.getPosition(Location.from(Row.TWO, Col.D));
         expect(twoD.piece instanceof Pawn && twoD.piece.playerColor == PlayerColor.WHITE).to.be.true;
-        let twoE = positions.getPosition(Row.TWO, Col.E);
+        let twoE = positions.getPosition(Location.from(Row.TWO, Col.E));
         expect(twoE.piece instanceof Pawn && twoE.piece.playerColor == PlayerColor.WHITE).to.be.true;
-        let twoF = positions.getPosition(Row.TWO, Col.F);
+        let twoF = positions.getPosition(Location.from(Row.TWO, Col.F));
         expect(twoF.piece instanceof Pawn && twoF.piece.playerColor == PlayerColor.WHITE).to.be.true;
-        let twoG = positions.getPosition(Row.TWO, Col.G);
+        let twoG = positions.getPosition(Location.from(Row.TWO, Col.G));
         expect(twoG.piece instanceof Pawn && twoG.piece.playerColor == PlayerColor.WHITE).to.be.true;
-        let twoH = positions.getPosition(Row.TWO, Col.H);
+        let twoH = positions.getPosition(Location.from(Row.TWO, Col.H));
         expect(twoH.piece instanceof Pawn && twoH.piece.playerColor == PlayerColor.WHITE).to.be.true;
 
-        let eightA = positions.getPosition(Row.EIGHT, Col.A);
+        let eightA = positions.getPosition(Location.from(Row.EIGHT, Col.A));
         expect(eightA.piece instanceof Rook && eightA.piece.playerColor == PlayerColor.BLACK).to.be.true;
-        let eightB = positions.getPosition(Row.EIGHT, Col.B);
+        let eightB = positions.getPosition(Location.from(Row.EIGHT, Col.B));
         expect(eightB.piece instanceof Knight && eightB.piece.playerColor == PlayerColor.BLACK).to.be.true;
-        let eightC = positions.getPosition(Row.EIGHT, Col.C);
+        let eightC = positions.getPosition(Location.from(Row.EIGHT, Col.C));
         expect(eightC.piece instanceof Bishop && eightC.piece.playerColor == PlayerColor.BLACK).to.be.true;
-        let eightD = positions.getPosition(Row.EIGHT, Col.D);
+        let eightD = positions.getPosition(Location.from(Row.EIGHT, Col.D));
         expect(eightD.piece instanceof Queen && eightD.piece.playerColor == PlayerColor.BLACK).to.be.true;
-        let eightE = positions.getPosition(Row.EIGHT, Col.E);
+        let eightE = positions.getPosition(Location.from(Row.EIGHT, Col.E));
         expect(eightE.piece instanceof King && eightE.piece.playerColor == PlayerColor.BLACK).to.be.true;
-        let eightF = positions.getPosition(Row.EIGHT, Col.F);
+        let eightF = positions.getPosition(Location.from(Row.EIGHT, Col.F));
         expect(eightF.piece instanceof Bishop && eightF.piece.playerColor == PlayerColor.BLACK).to.be.true;
-        let eightG = positions.getPosition(Row.EIGHT, Col.G);
+        let eightG = positions.getPosition(Location.from(Row.EIGHT, Col.G));
         expect(eightG.piece instanceof Knight && eightG.piece.playerColor == PlayerColor.BLACK).to.be.true;
-        let eightH = positions.getPosition(Row.EIGHT, Col.H);
+        let eightH = positions.getPosition(Location.from(Row.EIGHT, Col.H));
         expect(eightH.piece instanceof Rook && eightH.piece.playerColor == PlayerColor.BLACK).to.be.true;
-        let sevenA = positions.getPosition(Row.SEVEN, Col.A);
+        let sevenA = positions.getPosition(Location.from(Row.SEVEN, Col.A));
         expect(sevenA.piece instanceof Pawn && sevenA.piece.playerColor == PlayerColor.BLACK).to.be.true;
-        let sevenB = positions.getPosition(Row.SEVEN, Col.B);
+        let sevenB = positions.getPosition(Location.from(Row.SEVEN, Col.B));
         expect(sevenB.piece instanceof Pawn && sevenB.piece.playerColor == PlayerColor.BLACK).to.be.true;
-        let sevenC = positions.getPosition(Row.SEVEN, Col.C);
+        let sevenC = positions.getPosition(Location.from(Row.SEVEN, Col.C));
         expect(sevenC.piece instanceof Pawn && sevenC.piece.playerColor == PlayerColor.BLACK).to.be.true;
-        let sevenD = positions.getPosition(Row.SEVEN, Col.D);
+        let sevenD = positions.getPosition(Location.from(Row.SEVEN, Col.D));
         expect(sevenD.piece instanceof Pawn && sevenD.piece.playerColor == PlayerColor.BLACK).to.be.true;
-        let sevenE = positions.getPosition(Row.SEVEN, Col.E);
+        let sevenE = positions.getPosition(Location.from(Row.SEVEN, Col.E));
         expect(sevenE.piece instanceof Pawn && sevenE.piece.playerColor == PlayerColor.BLACK).to.be.true;
-        let sevenF = positions.getPosition(Row.SEVEN, Col.F);
+        let sevenF = positions.getPosition(Location.from(Row.SEVEN, Col.F));
         expect(sevenF.piece instanceof Pawn && sevenF.piece.playerColor == PlayerColor.BLACK).to.be.true;
-        let sevenG = positions.getPosition(Row.SEVEN, Col.G);
+        let sevenG = positions.getPosition(Location.from(Row.SEVEN, Col.G));
         expect(sevenG.piece instanceof Pawn && sevenG.piece.playerColor == PlayerColor.BLACK).to.be.true;
-        let sevenH = positions.getPosition(Row.SEVEN, Col.H);
+        let sevenH = positions.getPosition(Location.from(Row.SEVEN, Col.H));
         expect(sevenH.piece instanceof Pawn && sevenH.piece.playerColor == PlayerColor.BLACK).to.be.true;
     });
 
@@ -115,18 +115,12 @@ describe("board setup", function () {
 class MockOutcomeEngine implements OutcomeEngine {
 
     calculateOutcomeCalled = 0;
-    moveAllowedCalled = 0;
 
     calculateOutcome(positions: Positions, defeatedPieces: Array<Piece>, move: Move): Outcome {
         this.calculateOutcomeCalled++;
         let outcome = new Outcome();
-        outcome.defeatedPosition = positions.getPosition(Row.ONE, Col.A);
+        outcome.defeatedPosition = positions.getPosition(Location.from(Row.ONE, Col.A));
         return outcome;
-    }
-
-    isMoveAllowed(move: Move): boolean {
-        this.moveAllowedCalled++;
-        return true;
     }
 }
 
