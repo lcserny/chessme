@@ -29,17 +29,14 @@ export enum Col {
     H
 }
 
-export class Position {
+export class Location {
 
     private readonly _row: Row;
     private readonly _col: Col;
 
-    private _piece: Piece;
-
-    constructor(row: Row, col: Col, piece?: Piece) {
+    constructor(row: Row, col: Col) {
         this._row = row;
         this._col = col;
-        this._piece = piece;
     }
 
     get row(): Row {
@@ -48,6 +45,66 @@ export class Position {
 
     get col(): Col {
         return this._col;
+    }
+
+    up(): Location {
+        if (this.row == Row.EIGHT) {
+            return this;
+        }
+        let rowVal = this.row.valueOf();
+        let newRowKey = Row[rowVal + 1];
+        let newRow = (<any>Row)[newRowKey];
+        return new Location(newRow, this.col);
+    }
+
+    down(): Location {
+        if (this.row == Row.ONE) {
+            return this;
+        }
+        let rowVal = this.row.valueOf();
+        let newRowKey = Row[rowVal - 1];
+        let newRow = (<any>Row)[newRowKey];
+        return new Location(newRow, this.col);
+    }
+
+    left(): Location {
+        if (this.col == Col.A) {
+            return this;
+        }
+        let colVal = this.col.valueOf();
+        let newColKey = Col[colVal - 1];
+        let newCol = (<any>Col)[newColKey];
+        return new Location(this.row, newCol);
+    }
+
+    right(): Location {
+        if (this.col == Col.H) {
+            return this;
+        }
+        let colVal = this.col.valueOf();
+        let newColKey = Col[colVal + 1];
+        let newCol = (<any>Col)[newColKey];
+        return new Location(this.row, newCol);
+    }
+}
+
+export class Position {
+
+    private readonly _location: Location;
+
+    private _piece: Piece;
+
+    constructor(row: Row, col: Col, piece?: Piece) {
+        this._location = new Location(row, col);
+        this._piece = piece;
+    }
+
+    get row(): Row {
+        return this._location.row;
+    }
+
+    get col(): Col {
+        return this._location.col;
     }
 
     get piece(): Piece {

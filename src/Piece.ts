@@ -1,4 +1,5 @@
 import {PlayerColor} from "./Player";
+import {Col, Position, Row, Location} from "./Position";
 
 export abstract class Piece {
 
@@ -11,4 +12,6 @@ export abstract class Piece {
     get playerColor(): PlayerColor {
         return this._playerColor;
     }
+
+    abstract availableMoves(currentLocation: Location): Array<Location>
 }
