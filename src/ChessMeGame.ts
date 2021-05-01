@@ -73,6 +73,7 @@ export class ChessMeGame {
             let outcome = this._board.calculateOutcome(move);
             player.addMove(move);
             this.switchPlayerToMove(player);
+            // TODO: based on outcome, check if game finished, set it stopped and show winner?
             return outcome;
         }
 

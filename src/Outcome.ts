@@ -1,5 +1,6 @@
 import {Position} from "./Position";
 
+// TODO: outcome should know when in Check state and when CheckMate
 export class Outcome {
 
     private _defeatedPosition: Position;
