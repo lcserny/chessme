@@ -1,5 +1,5 @@
 import {Color} from "./Player";
-import {Location} from "./Position";
+import {Location, Positions} from "./Position";
 
 export abstract class Piece {
 
@@ -13,5 +13,13 @@ export abstract class Piece {
         return this._playerColor;
     }
 
-    abstract availableMoves(currentLocation: Location): Array<Location>
+    availableMoves(currentLocation: Location, positions: Positions): Array<Location> {
+        if (this._playerColor == Color.WHITE) {
+            return this.availableMovesWhite(currentLocation, positions);
+        }
+        return this.availableMovesBlack(currentLocation, positions);
+    }
+
+    protected abstract availableMovesWhite(currentLocation: Location, positions: Positions): Array<Location>;
+    protected abstract availableMovesBlack(currentLocation: Location, positions: Positions): Array<Location>;
 }

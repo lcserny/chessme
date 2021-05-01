@@ -110,6 +110,10 @@ describe("board setup", function () {
         expect(board.defeatedPieces.length).equals(1);
         expect(board.positions.length()).equals(initialPositionsLength - 1);
     });
+
+    it("board positions are updated after move", function () {
+        throw new Error("Not implemented");
+    });
 });
 
 class MockOutcomeEngine implements OutcomeEngine {

@@ -5,24 +5,24 @@ import {Move} from "../src/Move";
 import {Col, Position, Location, Row} from "../src/Position";
 
 describe("pawn outcome scenarios", function () {
-    it("pawn cannot move 2 locations", function () {
+    it("pawn can first time only move 2 locations up", function () {
         let board = new Board();
         let pawnMove = new Move(Location.from(Row.TWO, Col.B), Location.from(Row.FOUR, Col.B));
 
-        let err = new Error();
-        try {
-            board.calculateOutcome(pawnMove);
-        } catch (e) {
-            err = e;
-        }
-        expect(err.name).equals("IllegalMoveError");
+        let outcome = board.calculateOutcome(pawnMove);
+
+        assert.notEqual(outcome, null)
     });
 
-    it("pawn can move 1 location", function () {
-        // TODO
+    it("pawn cannot move 2 locations up after first move", function () {
+        throw new Error("Not implemented");
+    });
+
+    it("pawn can move 1 location up", function () {
+        throw new Error("Not implemented");
     });
 
     it("pawn moves 1 location over enemy and defeats it", function () {
-        // TODO
+        throw new Error("Not implemented");
     });
 });
