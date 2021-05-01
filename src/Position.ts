@@ -169,15 +169,15 @@ export class Positions {
     }
 
     addPosition(position: Position) {
-        let index = this._positions.indexOf(position, 0);
-        if (index == -1) {
+        if (this.getPosition(position.row, position.col) == null) {
             this._positions.push(position);
         }
     }
 
     removePosition(position: Position) {
-        let index = this._positions.indexOf(position, 0);
-        if (index > -1) {
+        let foundPos = this.getPosition(position.row, position.col);
+        if (foundPos != null) {
+            let index = this._positions.indexOf(foundPos);
             this._positions.splice(index, 1);
         }
     }
