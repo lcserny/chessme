@@ -1,7 +1,7 @@
 import {expect} from "chai";
 import {describe, it} from "mocha";
 import {Board} from "../src/Board";
-import {Col, Row} from "../src/Position";
+import {Col, Positions, Row} from "../src/Position";
 import {Pawn} from "../src/Pawn";
 import {Rook} from "../src/Rook";
 import {Knight} from "../src/Knight";
@@ -9,6 +9,10 @@ import {Bishop} from "../src/Bishop";
 import {King} from "../src/King";
 import {Queen} from "../src/Queen";
 import {PlayerColor} from "../src/Player";
+import {OutcomeEngine} from "../src/OutcomeEngine";
+import {Piece} from "../src/Piece";
+import {Move} from "../src/Move";
+import {Outcome} from "../src/Outcome";
 
 describe("board setup", function () {
     it("new boards initialize positions", function () {
@@ -88,4 +92,43 @@ describe("board setup", function () {
 
         expect(defeatedPieces.length).equals(0);
     });
+
+    it("boards delegate moveAllowed to outcomeEngine", function () {
+        let outEng = new MockOutcomeEngine();
+        let board = new Board(outEng);
+        board.isMoveAllowed(new MockMove());
+
+        expect(outEng.moveAllowedCalled).equals(1);
+    });
+
+    it("boards delegate calculateOutcome to outcomeEngine", function () {
+        let outEng = new MockOutcomeEngine();
+        let board = new Board(outEng);
+        board.calculateOutcome(new MockMove());
+
+        expect(outEng.calculateOutcomeCalled).equals(1);
+    });
 });
+
+class MockOutcomeEngine implements OutcomeEngine {
+
+    calculateOutcomeCalled = 0;
+    moveAllowedCalled = 0;
+
+    calculateOutcome(positions: Positions, defeatedPieces: Array<Piece>, move: Move): Outcome {
+        this.calculateOutcomeCalled++;
+        return null;
+    }
+
+    isMoveAllowed(move: Move): boolean {
+        this.moveAllowedCalled++;
+        return true;
+    }
+}
+
+class MockMove extends Move {
+
+    constructor() {
+        super(null, null);
+    }
+}
