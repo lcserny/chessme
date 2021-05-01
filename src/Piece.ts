@@ -12,3 +12,10 @@ export class Piece {
         return this._playerColor;
     }
 }
+
+export class NoPiece extends Piece {
+
+    constructor() {
+        super(null);
+    }
+}

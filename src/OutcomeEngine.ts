@@ -1,16 +1,16 @@
-import {Position} from "./Position";
+import {Position, Positions} from "./Position";
 import {Move} from "./Move";
 import {Outcome} from "./Outcome";
 import {Piece} from "./Piece";
 
 export interface OutcomeEngine {
     isMoveAllowed(move: Move): boolean;
-    calculateOutcome(positions: Array<Position>, defeatedPieces: Array<Piece>, move: Move): Outcome;
+    calculateOutcome(positions: Positions, defeatedPieces: Array<Piece>, move: Move): Outcome;
 }
 
 export class SimpleOutcomeEngine implements OutcomeEngine {
 
-    calculateOutcome(positions: Array<Position>, defeatedPieces: Array<Piece>, move: Move): Outcome {
+    calculateOutcome(positions: Positions, defeatedPieces: Array<Piece>, move: Move): Outcome {
         return new Outcome();
     }
 

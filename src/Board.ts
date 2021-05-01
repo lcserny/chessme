@@ -1,4 +1,4 @@
-import {Position} from "./Position";
+import {Position, Positions} from "./Position";
 import {OutcomeEngine, SimpleOutcomeEngine} from "./OutcomeEngine";
 import {Outcome} from "./Outcome";
 import {Move} from "./Move";
@@ -7,17 +7,16 @@ import {Piece} from "./Piece";
 export class Board {
 
     private readonly _outcomeEngine: OutcomeEngine;
-    private readonly _positions: Array<Position>;
+    private readonly _positions: Positions;
     private readonly _defeatedPieces: Array<Piece>;
 
     constructor(outcomeEngine?: OutcomeEngine) {
-        this._positions = new Array<Position>();
+        this._positions = new Positions();
         this._defeatedPieces = new Array<Piece>();
         this._outcomeEngine = outcomeEngine == null ? new SimpleOutcomeEngine() : outcomeEngine;
-        this.initPositions();
     }
 
-    get positions(): Array<Position> {
+    get positions(): Positions {
         return this._positions;
     }
 
@@ -33,10 +32,6 @@ export class Board {
         let outcome = this._outcomeEngine.calculateOutcome(this.positions, this.defeatedPieces, move);
         this.updateBoard(outcome);
         return outcome;
-    }
-
-    private initPositions(): void {
-        // TODO
     }
 
     private updateBoard(outcome: Outcome): void {

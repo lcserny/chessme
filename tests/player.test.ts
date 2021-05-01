@@ -4,7 +4,7 @@ import {Player, PlayerColor} from "../src/Player";
 import {Move} from "../src/Move";
 import {Col, Position, Row} from "../src/Position";
 
-describe("payer commands", function () {
+describe("player commands", function () {
     it("new players have no moves made", function () {
         let player = new Player("p1", PlayerColor.WHITE);
         expect(player.moves.length).equals(0);
