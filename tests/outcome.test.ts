@@ -1,7 +1,7 @@
 import {assert, expect} from "chai";
 import {describe, it} from "mocha";
 
-describe("outcome scenarios", function () {
+describe("pawn outcome scenarios", function () {
     it("pawn cannot move 2 locations", function () {
         // TODO
     });
