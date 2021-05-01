@@ -4,6 +4,7 @@ import {describe, it} from "mocha";
 describe("pawn outcome scenarios", function () {
     it("pawn cannot move 2 locations", function () {
         // TODO
+
     });
 
     it("pawn can move 1 location", function () {

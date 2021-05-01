@@ -34,9 +34,13 @@ export class Location {
     private readonly _row: Row;
     private readonly _col: Col;
 
-    constructor(row: Row, col: Col) {
+    private constructor(row: Row, col: Col) {
         this._row = row;
         this._col = col;
+    }
+
+    static from(row: Row, col: Col): Location {
+        return new Location(row, col);
     }
 
     get row(): Row {
@@ -94,17 +98,13 @@ export class Position {
 
     private _piece: Piece;
 
-    constructor(row: Row, col: Col, piece?: Piece) {
-        this._location = new Location(row, col);
+    constructor(location: Location, piece?: Piece) {
+        this._location = location;
         this._piece = piece;
     }
 
-    get row(): Row {
-        return this._location.row;
-    }
-
-    get col(): Col {
-        return this._location.col;
+    get location(): Location {
+        return this._location;
     }
 
     get piece(): Piece {
@@ -130,38 +130,38 @@ export class Positions {
     }
 
     private initPositions(): void {
-        this.addPosition(new Position(Row.ONE, Col.A, new Rook(PlayerColor.WHITE)));
-        this.addPosition(new Position(Row.ONE, Col.B, new Knight(PlayerColor.WHITE)));
-        this.addPosition(new Position(Row.ONE, Col.C, new Bishop(PlayerColor.WHITE)));
-        this.addPosition(new Position(Row.ONE, Col.D, new Queen(PlayerColor.WHITE)));
-        this.addPosition(new Position(Row.ONE, Col.E, new King(PlayerColor.WHITE)));
-        this.addPosition(new Position(Row.ONE, Col.F, new Bishop(PlayerColor.WHITE)));
-        this.addPosition(new Position(Row.ONE, Col.G, new Knight(PlayerColor.WHITE)));
-        this.addPosition(new Position(Row.ONE, Col.H, new Rook(PlayerColor.WHITE)));
-        this.addPosition(new Position(Row.TWO, Col.A, new Pawn(PlayerColor.WHITE)));
-        this.addPosition(new Position(Row.TWO, Col.B, new Pawn(PlayerColor.WHITE)));
-        this.addPosition(new Position(Row.TWO, Col.C, new Pawn(PlayerColor.WHITE)));
-        this.addPosition(new Position(Row.TWO, Col.D, new Pawn(PlayerColor.WHITE)));
-        this.addPosition(new Position(Row.TWO, Col.E, new Pawn(PlayerColor.WHITE)));
-        this.addPosition(new Position(Row.TWO, Col.F, new Pawn(PlayerColor.WHITE)));
-        this.addPosition(new Position(Row.TWO, Col.G, new Pawn(PlayerColor.WHITE)));
-        this.addPosition(new Position(Row.TWO, Col.H, new Pawn(PlayerColor.WHITE)));
-        this.addPosition(new Position(Row.EIGHT, Col.A, new Rook(PlayerColor.BLACK)));
-        this.addPosition(new Position(Row.EIGHT, Col.B, new Knight(PlayerColor.BLACK)));
-        this.addPosition(new Position(Row.EIGHT, Col.C, new Bishop(PlayerColor.BLACK)));
-        this.addPosition(new Position(Row.EIGHT, Col.D, new Queen(PlayerColor.BLACK)));
-        this.addPosition(new Position(Row.EIGHT, Col.E, new King(PlayerColor.BLACK)));
-        this.addPosition(new Position(Row.EIGHT, Col.F, new Bishop(PlayerColor.BLACK)));
-        this.addPosition(new Position(Row.EIGHT, Col.G, new Knight(PlayerColor.BLACK)));
-        this.addPosition(new Position(Row.EIGHT, Col.H, new Rook(PlayerColor.BLACK)));
-        this.addPosition(new Position(Row.SEVEN, Col.A, new Pawn(PlayerColor.BLACK)));
-        this.addPosition(new Position(Row.SEVEN, Col.B, new Pawn(PlayerColor.BLACK)));
-        this.addPosition(new Position(Row.SEVEN, Col.C, new Pawn(PlayerColor.BLACK)));
-        this.addPosition(new Position(Row.SEVEN, Col.D, new Pawn(PlayerColor.BLACK)));
-        this.addPosition(new Position(Row.SEVEN, Col.E, new Pawn(PlayerColor.BLACK)));
-        this.addPosition(new Position(Row.SEVEN, Col.F, new Pawn(PlayerColor.BLACK)));
-        this.addPosition(new Position(Row.SEVEN, Col.G, new Pawn(PlayerColor.BLACK)));
-        this.addPosition(new Position(Row.SEVEN, Col.H, new Pawn(PlayerColor.BLACK)));
+        this.addPosition(new Position(Location.from(Row.ONE, Col.A), new Rook(PlayerColor.WHITE)));
+        this.addPosition(new Position(Location.from(Row.ONE, Col.B), new Knight(PlayerColor.WHITE)));
+        this.addPosition(new Position(Location.from(Row.ONE, Col.C), new Bishop(PlayerColor.WHITE)));
+        this.addPosition(new Position(Location.from(Row.ONE, Col.D), new Queen(PlayerColor.WHITE)));
+        this.addPosition(new Position(Location.from(Row.ONE, Col.E), new King(PlayerColor.WHITE)));
+        this.addPosition(new Position(Location.from(Row.ONE, Col.F), new Bishop(PlayerColor.WHITE)));
+        this.addPosition(new Position(Location.from(Row.ONE, Col.G), new Knight(PlayerColor.WHITE)));
+        this.addPosition(new Position(Location.from(Row.ONE, Col.H), new Rook(PlayerColor.WHITE)));
+        this.addPosition(new Position(Location.from(Row.TWO, Col.A), new Pawn(PlayerColor.WHITE)));
+        this.addPosition(new Position(Location.from(Row.TWO, Col.B), new Pawn(PlayerColor.WHITE)));
+        this.addPosition(new Position(Location.from(Row.TWO, Col.C), new Pawn(PlayerColor.WHITE)));
+        this.addPosition(new Position(Location.from(Row.TWO, Col.D), new Pawn(PlayerColor.WHITE)));
+        this.addPosition(new Position(Location.from(Row.TWO, Col.E), new Pawn(PlayerColor.WHITE)));
+        this.addPosition(new Position(Location.from(Row.TWO, Col.F), new Pawn(PlayerColor.WHITE)));
+        this.addPosition(new Position(Location.from(Row.TWO, Col.G), new Pawn(PlayerColor.WHITE)));
+        this.addPosition(new Position(Location.from(Row.TWO, Col.H), new Pawn(PlayerColor.WHITE)));
+        this.addPosition(new Position(Location.from(Row.EIGHT, Col.A), new Rook(PlayerColor.BLACK)));
+        this.addPosition(new Position(Location.from(Row.EIGHT, Col.B), new Knight(PlayerColor.BLACK)));
+        this.addPosition(new Position(Location.from(Row.EIGHT, Col.C), new Bishop(PlayerColor.BLACK)));
+        this.addPosition(new Position(Location.from(Row.EIGHT, Col.D), new Queen(PlayerColor.BLACK)));
+        this.addPosition(new Position(Location.from(Row.EIGHT, Col.E), new King(PlayerColor.BLACK)));
+        this.addPosition(new Position(Location.from(Row.EIGHT, Col.F), new Bishop(PlayerColor.BLACK)));
+        this.addPosition(new Position(Location.from(Row.EIGHT, Col.G), new Knight(PlayerColor.BLACK)));
+        this.addPosition(new Position(Location.from(Row.EIGHT, Col.H), new Rook(PlayerColor.BLACK)));
+        this.addPosition(new Position(Location.from(Row.SEVEN, Col.A), new Pawn(PlayerColor.BLACK)));
+        this.addPosition(new Position(Location.from(Row.SEVEN, Col.B), new Pawn(PlayerColor.BLACK)));
+        this.addPosition(new Position(Location.from(Row.SEVEN, Col.C), new Pawn(PlayerColor.BLACK)));
+        this.addPosition(new Position(Location.from(Row.SEVEN, Col.D), new Pawn(PlayerColor.BLACK)));
+        this.addPosition(new Position(Location.from(Row.SEVEN, Col.E), new Pawn(PlayerColor.BLACK)));
+        this.addPosition(new Position(Location.from(Row.SEVEN, Col.F), new Pawn(PlayerColor.BLACK)));
+        this.addPosition(new Position(Location.from(Row.SEVEN, Col.G), new Pawn(PlayerColor.BLACK)));
+        this.addPosition(new Position(Location.from(Row.SEVEN, Col.H), new Pawn(PlayerColor.BLACK)));
     }
 
     length(): number {
@@ -169,13 +169,13 @@ export class Positions {
     }
 
     addPosition(position: Position) {
-        if (this.getPosition(position.row, position.col) == null) {
+        if (this.getPosition(position.location.row, position.location.col) == null) {
             this._positions.push(position);
         }
     }
 
     removePosition(position: Position) {
-        let foundPos = this.getPosition(position.row, position.col);
+        let foundPos = this.getPosition(position.location.row, position.location.col);
         if (foundPos != null) {
             let index = this._positions.indexOf(foundPos);
             this._positions.splice(index, 1);
@@ -184,7 +184,7 @@ export class Positions {
 
     getPosition(row: Row, col: Col): Position | null {
         for (let position of this._positions) {
-            if (position.row == row && position.col == col) {
+            if (position.location.row == row && position.location.col == col) {
                 return position;
             }
         }
