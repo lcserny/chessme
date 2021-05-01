@@ -1,15 +1,15 @@
-import {PlayerColor} from "./Player";
+import {Color} from "./Player";
 import {Location} from "./Position";
 
 export abstract class Piece {
 
-    private readonly _playerColor: PlayerColor;
+    private readonly _playerColor: Color;
 
-    constructor(playerColor: PlayerColor) {
+    constructor(playerColor: Color) {
         this._playerColor = playerColor;
     }
 
-    get playerColor(): PlayerColor {
+    get playerColor(): Color {
         return this._playerColor;
     }
 

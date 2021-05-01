@@ -1,4 +1,4 @@
-import {Player, PlayerColor} from "./Player";
+import {Player, Color} from "./Player";
 import {
     GameStatusError,
     NoPlayersError, PlayerTurnError,
@@ -116,7 +116,7 @@ export class ChessMeGame {
                 throw new SamePlayerTeamError("Both players joining the game cannot be of same color");
             }
             for (let player of this._players) {
-                if (player.color == PlayerColor.WHITE) {
+                if (player.color == Color.WHITE) {
                     this._playerToMove = player;
                     break
                 }

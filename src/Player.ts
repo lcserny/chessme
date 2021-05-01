@@ -1,6 +1,6 @@
 import {Move} from "./Move";
 
-export enum PlayerColor {
+export enum Color {
     WHITE = "white",
     BLACK = "black"
 }
@@ -8,16 +8,16 @@ export enum PlayerColor {
 export class Player {
 
     private readonly _name: string;
-    private readonly _color: PlayerColor;
+    private readonly _color: Color;
     private readonly _moves: Array<Move>;
 
-    constructor(name: string, color: PlayerColor) {
+    constructor(name: string, color: Color) {
         this._name = name;
         this._moves = new Array<Move>();
         this._color = color;
     }
 
-    get color(): PlayerColor {
+    get color(): Color {
         return this._color;
     }
 
