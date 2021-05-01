@@ -93,14 +93,6 @@ describe("board setup", function () {
         expect(defeatedPieces.length).equals(0);
     });
 
-    it("boards delegate moveAllowed to outcomeEngine", function () {
-        let outEng = new MockOutcomeEngine();
-        let board = new Board(outEng);
-        board.isMoveAllowed(new MockMove());
-
-        expect(outEng.moveAllowedCalled).equals(1);
-    });
-
     it("boards delegate calculateOutcome to outcomeEngine", function () {
         let outEng = new MockOutcomeEngine();
         let board = new Board(outEng);

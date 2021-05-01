@@ -39,3 +39,17 @@ export class PlayerNameExistsError extends Error {
         this.name = "PlayerNameExistsError";
     }
 }
+
+export class PlayerTurnError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = "PlayerTurnError";
+    }
+}
+
+export class IllegalMoveError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = "IllegalMoveError";
+    }
+}

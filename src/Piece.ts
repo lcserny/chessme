@@ -1,5 +1,5 @@
 import {PlayerColor} from "./Player";
-import {Col, Position, Row, Location} from "./Position";
+import {Location} from "./Position";
 
 export abstract class Piece {
 

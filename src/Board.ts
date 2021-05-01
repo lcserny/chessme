@@ -24,10 +24,6 @@ export class Board {
         return this._defeatedPieces;
     }
 
-    isMoveAllowed(move: Move): boolean {
-        return this._outcomeEngine.isMoveAllowed(move);
-    }
-
     calculateOutcome(move: Move): Outcome {
         let outcome = this._outcomeEngine.calculateOutcome(this.positions, this.defeatedPieces, move);
         this.updateBoard(outcome);

@@ -6,7 +6,6 @@ import {Board} from "../src/Board";
 import {Move} from "../src/Move";
 import {Col, Position, Row} from "../src/Position";
 import {GameStatusError} from "../src/errors";
-import {NotAllowed} from "../src/Outcome";
 
 describe("game statuses", function () {
     let board = new Board();
@@ -171,9 +170,13 @@ describe("game players", function () {
         let move = new Move(new Position(Row.ONE, Col.A), new Position(Row.TWO, Col.A));
         game.start();
 
-        let outcome = game.move(player2, move);
-
-        expect(outcome instanceof NotAllowed).to.be.true;
+        let error = new Error();
+        try {
+            game.move(player2, move);
+        } catch (e) {
+            error = e;
+        }
+        expect(error.name).equals("PlayerTurnError");
     });
 
     it("game switches player turn allowed after move", function () {
@@ -183,10 +186,14 @@ describe("game players", function () {
         let move = new Move(new Position(Row.ONE, Col.A), new Position(Row.TWO, Col.A));
         game.start();
 
-        let outcome1 = game.move(player1, move);
-        let outcome2 = game.move(player1, move);
+        game.move(player1, move);
 
-        expect(outcome1 instanceof NotAllowed).to.be.false;
-        expect(outcome2 instanceof NotAllowed).to.be.true;
+        let error = new Error();
+        try {
+            game.move(player1, move);
+        } catch (e) {
+            error = e;
+        }
+        expect(error.name).equals("PlayerTurnError");
     });
 });

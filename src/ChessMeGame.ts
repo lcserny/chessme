@@ -1,14 +1,14 @@
 import {Player, PlayerColor} from "./Player";
 import {
     GameStatusError,
-    NoPlayersError,
+    NoPlayersError, PlayerTurnError,
     PlayerNameExistsError,
     PlayerNotInGameError,
     SamePlayerTeamError,
     TooManyPlayersError
 } from "./errors";
 import {Board} from "./Board";
-import {NotAllowed, Outcome} from "./Outcome";
+import {Outcome} from "./Outcome";
 import {Move} from "./Move";
 
 enum GameStatus {
@@ -69,13 +69,14 @@ export class ChessMeGame {
         }
 
         this.checkPlayerIsPlaying(player);
-        if (this._playerToMove != null && this._playerToMove.name == player.name
-            && this._board.isMoveAllowed(move)) {
+        if (this._playerToMove != null && this._playerToMove.name == player.name) {
+            let outcome = this._board.calculateOutcome(move);
             player.addMove(move);
             this.switchPlayerToMove(player);
-            return this._board.calculateOutcome(move);
+            return outcome;
         }
-        return new NotAllowed();
+
+        throw new PlayerTurnError("Not player's turn to move");
     }
 
     private checkPlayerNameExists(player: Player): void {

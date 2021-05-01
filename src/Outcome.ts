@@ -16,7 +16,3 @@ export class Outcome {
         this._defeatedPosition = value;
     }
 }
-
-export class NotAllowed extends Outcome {
-
-}
