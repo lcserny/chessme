@@ -11,7 +11,7 @@ export class Queen extends Piece {
         return this.availableMovesInternal(currentLocation, positions);
     }
 
-    protected availableMovesInternal(currentLocation: Location, positions: Positions): Array<Location> {
+    private availableMovesInternal(currentLocation: Location, positions: Positions): Array<Location> {
         let moves = new Array<Location>();
         moves = moves.concat(this.getAllDirection(currentLocation, positions, x => x.up()));
         moves = moves.concat(this.getAllDirection(currentLocation, positions, x => x.down()));
