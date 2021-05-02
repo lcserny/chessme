@@ -26,16 +26,15 @@ export class Board {
 
     calculateOutcome(move: Move): Outcome {
         let outcome = this._outcomeEngine.calculateOutcome(this.positions, this.defeatedPieces, move);
-        this.updateBoard(outcome);
+        this.updateBoard(move, outcome);
         return outcome;
     }
 
-    private updateBoard(outcome: Outcome): void {
-        // TODO: update position of moved piece
-
+    private updateBoard(move: Move, outcome: Outcome): void {
         if (outcome.hasDefeatedPosition()) {
             this.defeatedPieces.push(outcome.defeatedPosition.piece);
             this.positions.removePosition(outcome.defeatedPosition);
         }
+        this.positions.move(move.source, move.target);
     }
 }

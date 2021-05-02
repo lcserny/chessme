@@ -1,7 +1,7 @@
-import {expect} from "chai";
+import {assert, expect} from "chai";
 import {describe, it} from "mocha";
 import {Board} from "../src/Board";
-import {Col, Positions, Location, Row} from "../src/Position";
+import {Col, Location, Positions, Row} from "../src/Position";
 import {Pawn} from "../src/Pawn";
 import {Rook} from "../src/Rook";
 import {Knight} from "../src/Knight";
@@ -9,7 +9,7 @@ import {Bishop} from "../src/Bishop";
 import {King} from "../src/King";
 import {Queen} from "../src/Queen";
 import {Color} from "../src/Player";
-import {OutcomeEngine} from "../src/OutcomeEngine";
+import {OutcomeEngine, SimpleOutcomeEngine} from "../src/OutcomeEngine";
 import {Piece} from "../src/Piece";
 import {Move} from "../src/Move";
 import {Outcome} from "../src/Outcome";
@@ -96,41 +96,42 @@ describe("board setup", function () {
     it("boards delegate calculateOutcome to outcomeEngine", function () {
         let outEng = new MockOutcomeEngine();
         let board = new Board(outEng);
-        board.calculateOutcome(new MockMove());
+
+        board.calculateOutcome(new Move(Location.from(Row.TWO, Col.B), Location.from(Row.THREE, Col.B)));
 
         expect(outEng.calculateOutcomeCalled).equals(1);
     });
 
     it("board is updated with defeated piece after move", function () {
-        let outEng = new MockOutcomeEngine();
-        let board = new Board(outEng);
+        let board = new Board(new MockOutcomeEngine());
+
         let initialPositionsLength = board.positions.length();
-        board.calculateOutcome(new MockMove());
+        board.positions.move(Location.from(Row.TWO, Col.B), Location.from(Row.SIX, Col.B))
+        board.calculateOutcome(new Move(Location.from(Row.SIX, Col.B), Location.from(Row.SEVEN, Col.A)));
 
         expect(board.defeatedPieces.length).equals(1);
         expect(board.positions.length()).equals(initialPositionsLength - 1);
     });
 
     it("board positions are updated after move", function () {
-        throw new Error("Not implemented");
+        let board = new Board(new SimpleOutcomeEngine());
+        let source = Location.from(Row.TWO, Col.B);
+        let target = Location.from(Row.THREE, Col.B);
+
+        let sourcePiece = board.positions.getPosition(source).piece;
+        board.calculateOutcome(new Move(source, target));
+
+        assert.equal(board.positions.getPosition(source), null);
+        expect(board.positions.getPosition(target).piece).equals(sourcePiece);
     });
 });
 
-class MockOutcomeEngine implements OutcomeEngine {
+class MockOutcomeEngine extends SimpleOutcomeEngine{
 
     calculateOutcomeCalled = 0;
 
     calculateOutcome(positions: Positions, defeatedPieces: Array<Piece>, move: Move): Outcome {
         this.calculateOutcomeCalled++;
-        let outcome = new Outcome();
-        outcome.defeatedPosition = positions.getPosition(Location.from(Row.ONE, Col.A));
-        return outcome;
-    }
-}
-
-class MockMove extends Move {
-
-    constructor() {
-        super(null, null);
+        return super.calculateOutcome(positions, defeatedPieces, move);
     }
 }

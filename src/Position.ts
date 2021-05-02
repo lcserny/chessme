@@ -190,4 +190,10 @@ export class Positions {
         }
         return null;
     }
+
+    move(source: Location, target: Location): void {
+        let sourcePos = this.getPosition(source);
+        this.removePosition(sourcePos);
+        this.addPosition(new Position(target, sourcePos.piece))
+    }
 }

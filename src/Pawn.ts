@@ -4,60 +4,40 @@ import {Location, Positions, Row} from "./Position";
 export class Pawn extends Piece {
 
     availableMovesBlack(currentLocation: Location, positions: Positions): Array<Location> {
-        let moves = new Array<Location>();
-
         let belowOne = currentLocation.down();
-        let belowOnePos = positions.getPosition(belowOne);
-        if (belowOnePos == null || !belowOnePos.hasPiece()) {
-            moves.push(belowOne);
-        }
-
         let belowTwo = belowOne.down();
-        let belowTwoPos = positions.getPosition(belowTwo);
-        if (currentLocation.row == Row.SEVEN && (belowTwoPos == null || !belowTwoPos.hasPiece())) {
-            moves.push(belowTwo);
-        }
-
-        let belowLeft = belowOne.left();
-        let belowLeftPos = positions.getPosition(belowLeft);
-        if (belowLeftPos != null && belowLeftPos.hasPiece() && belowLeftPos.piece.playerColor != this.playerColor) {
-            moves.push(belowLeft);
-        }
-
-        let belowRight = belowOne.right();
-        let belowRightPos = positions.getPosition(belowRight);
-        if (belowRightPos != null && belowRightPos.hasPiece() && belowRightPos.piece.playerColor != this.playerColor) {
-            moves.push(belowRight);
-        }
-
-        return moves;
+        return this.availableMovesInternal(currentLocation, positions, belowOne, belowTwo, Row.SEVEN);
     }
 
     availableMovesWhite(currentLocation: Location, positions: Positions): Array<Location> {
+        let aboveOne = currentLocation.up();
+        let aboveTwo = aboveOne.up();
+        return this.availableMovesInternal(currentLocation, positions, aboveOne, aboveTwo, Row.TWO);
+    }
+
+    private availableMovesInternal(currentLocation: Location, positions: Positions, advancedOne: Location, advancedTwo: Location, initRow: Row): Array<Location> {
         let moves = new Array<Location>();
 
-        let aboveOne = currentLocation.up();
-        let aboveOnePos = positions.getPosition(aboveOne);
-        if (aboveOnePos == null || !aboveOnePos.hasPiece()) {
-            moves.push(aboveOne);
+        let advancedOnePos = positions.getPosition(advancedOne);
+        if (advancedOnePos == null || !advancedOnePos.hasPiece()) {
+            moves.push(advancedOne);
         }
 
-        let aboveTwo = aboveOne.up();
-        let aboveTwoPos = positions.getPosition(aboveTwo);
-        if (currentLocation.row == Row.TWO && (aboveTwoPos == null || !aboveTwoPos.hasPiece())) {
-            moves.push(aboveTwo);
+        let advancedTwoPos = positions.getPosition(advancedTwo);
+        if (currentLocation.row == initRow && (advancedTwoPos == null || !advancedTwoPos.hasPiece())) {
+            moves.push(advancedTwo);
         }
 
-        let aboveLeft = aboveOne.left();
-        let aboveLeftPos = positions.getPosition(aboveLeft);
-        if (aboveLeftPos != null && aboveLeftPos.hasPiece() && aboveLeftPos.piece.playerColor != this.playerColor) {
-            moves.push(aboveLeft);
+        let advancedLeft = advancedOne.left();
+        let advancedLeftPos = positions.getPosition(advancedLeft);
+        if (advancedLeftPos != null && advancedLeftPos.hasPiece() && advancedLeftPos.piece.playerColor != this.playerColor) {
+            moves.push(advancedLeft);
         }
 
-        let aboveRight = aboveOne.right();
-        let aboveRightPos = positions.getPosition(aboveRight);
-        if (aboveRightPos != null && aboveRightPos.hasPiece() && aboveRightPos.piece.playerColor != this.playerColor) {
-            moves.push(aboveRight);
+        let advancedRight = advancedOne.right();
+        let advancedRightPos = positions.getPosition(advancedRight);
+        if (advancedRightPos != null && advancedRightPos.hasPiece() && advancedRightPos.piece.playerColor != this.playerColor) {
+            moves.push(advancedRight);
         }
 
         return moves;
