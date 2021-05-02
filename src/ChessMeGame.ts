@@ -33,6 +33,10 @@ export class ChessMeGame {
         this.checkPlayerTeams();
     }
 
+    get status(): string {
+        return this._status;
+    }
+
     join(player: Player): void {
         this.checkPlayerNameExists(player);
         if (this._players.length == 2) {
@@ -40,27 +44,6 @@ export class ChessMeGame {
         }
         this._players.push(player);
         this.checkPlayerTeams();
-    }
-
-    private start(): void {
-        if (this._players.length != 2) {
-            throw new NoPlayersError("No players joined the game");
-        }
-        if (this._status == GameStatus.STARTED) {
-            throw new GameStatusError("Game already started");
-        }
-        this._status = GameStatus.STARTED;
-    }
-
-    private stop(): void {
-        if (this._status == GameStatus.STOPPED) {
-            throw new GameStatusError("Game already stopped");
-        }
-        this._status = GameStatus.STOPPED
-    }
-
-    get status(): string {
-        return this._status;
     }
 
     move(player: Player, move: Move): Outcome {
@@ -78,6 +61,23 @@ export class ChessMeGame {
         }
 
         throw new PlayerTurnError("Not player's turn to move");
+    }
+
+    private start(): void {
+        if (this._players.length != 2) {
+            throw new NoPlayersError("No players joined the game");
+        }
+        if (this._status == GameStatus.STARTED) {
+            throw new GameStatusError("Game already started");
+        }
+        this._status = GameStatus.STARTED;
+    }
+
+    private stop(): void {
+        if (this._status == GameStatus.STOPPED) {
+            throw new GameStatusError("Game already stopped");
+        }
+        this._status = GameStatus.STOPPED
     }
 
     private checkPlayerNameExists(player: Player): void {
