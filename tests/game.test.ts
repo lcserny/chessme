@@ -4,12 +4,9 @@ import {ChessMeGame} from "../src/ChessMeGame";
 import {Color, Player} from "../src/Player";
 import {Board} from "../src/Board";
 import {Move} from "../src/Move";
-import {Col, Location, Positions, Row} from "../src/Position";
+import {Col, Location, Row} from "../src/Position";
 import {GameStatusError} from "../src/errors";
-import {OutcomeEngine} from "../src/OutcomeEngine";
-import {Piece} from "../src/Piece";
-import {Outcome} from "../src/Outcome";
-import {assertError} from "./common.test";
+import {assertError, ConfigurableOutcomeEngine} from "./common.test";
 
 describe("game statuses", function () {
     let board = new Board();
@@ -85,7 +82,7 @@ describe("game players", function () {
     it("game executes move for player", function () {
         let player1 = new Player("a", Color.WHITE);
         let player2 = new Player("b", Color.BLACK);
-        let game = new ChessMeGame(new Board(new MockOutcomeEngine()), new Array<Player>(player2, player1));
+        let game = new ChessMeGame(new Board(new ConfigurableOutcomeEngine()), new Array<Player>(player2, player1));
         let move = new Move(Location.from(Row.ONE, Col.A), Location.from(Row.TWO, Col.A));
 
         let outcome = game.move(player1, move);
@@ -107,7 +104,7 @@ describe("game players", function () {
     it("game switches player turn allowed after move", function () {
         let player1 = new Player("a", Color.WHITE);
         let player2 = new Player("b", Color.BLACK);
-        let game = new ChessMeGame(new Board(new MockOutcomeEngine()), new Array<Player>(player1, player2));
+        let game = new ChessMeGame(new Board(new ConfigurableOutcomeEngine()), new Array<Player>(player1, player2));
         let move = new Move(Location.from(Row.ONE, Col.A), Location.from(Row.TWO, Col.A));
 
         game.move(player1, move);
@@ -117,12 +114,3 @@ describe("game players", function () {
         });
     });
 });
-
-// TODO: test checked state and check mate
-
-class MockOutcomeEngine implements OutcomeEngine {
-
-    calculateOutcome(positions: Positions, defeatedPieces: Array<Piece>, move: Move): Outcome {
-        return new Outcome();
-    }
-}

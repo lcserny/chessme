@@ -1,8 +1,9 @@
 import { Positions} from "./Position";
 import {Move} from "./Move";
-import {Outcome} from "./Outcome";
+import {CheckMate, Outcome} from "./Outcome";
 import {Piece} from "./Piece";
 import {IllegalMoveError} from "./errors";
+import {King} from "./King";
 
 export interface OutcomeEngine {
     calculateOutcome(positions: Positions, defeatedPieces: Array<Piece>, move: Move): Outcome;
@@ -16,10 +17,14 @@ export class SimpleOutcomeEngine implements OutcomeEngine {
             let target = move.target;
 
             let outcome = new Outcome();
-            if (positions.getPosition(target) != null
-                && positions.getPosition(target).hasPiece()
-                && positions.getPosition(target).piece.playerColor != positions.getPosition(source).piece.playerColor) {
-                outcome.defeatedPosition = positions.getPosition(target);
+            let sourcePosition = positions.getPosition(source);
+            let targetPosition = positions.getPosition(target);
+
+            if (targetPosition != null && targetPosition.hasPiece() && targetPosition.piece.playerColor != sourcePosition.piece.playerColor) {
+                if (targetPosition.piece instanceof King) {
+                    outcome = new CheckMate();
+                }
+                outcome.defeatedPosition = targetPosition;
             }
             return outcome;
         }

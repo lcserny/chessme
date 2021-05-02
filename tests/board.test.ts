@@ -13,6 +13,7 @@ import {OutcomeEngine, SimpleOutcomeEngine} from "../src/OutcomeEngine";
 import {Piece} from "../src/Piece";
 import {Move} from "../src/Move";
 import {Outcome} from "../src/Outcome";
+import {OutcomeEngineSpy} from "./common.test";
 
 describe("board setup", function () {
     it("new boards initialize positions", function () {
@@ -94,7 +95,7 @@ describe("board setup", function () {
     });
 
     it("boards delegate calculateOutcome to outcomeEngine", function () {
-        let outEng = new MockOutcomeEngine();
+        let outEng = new OutcomeEngineSpy();
         let board = new Board(outEng);
 
         board.calculateOutcome(new Move(Location.from(Row.TWO, Col.B), Location.from(Row.THREE, Col.B)));
@@ -103,7 +104,7 @@ describe("board setup", function () {
     });
 
     it("board is updated with defeated piece after move", function () {
-        let board = new Board(new MockOutcomeEngine());
+        let board = new Board(new OutcomeEngineSpy());
 
         let initialPositionsLength = board.positions.length();
         board.positions.move(Location.from(Row.TWO, Col.B), Location.from(Row.SIX, Col.B))
@@ -125,13 +126,3 @@ describe("board setup", function () {
         expect(board.positions.getPosition(target).piece).equals(sourcePiece);
     });
 });
-
-class MockOutcomeEngine extends SimpleOutcomeEngine{
-
-    calculateOutcomeCalled = 0;
-
-    calculateOutcome(positions: Positions, defeatedPieces: Array<Piece>, move: Move): Outcome {
-        this.calculateOutcomeCalled++;
-        return super.calculateOutcome(positions, defeatedPieces, move);
-    }
-}

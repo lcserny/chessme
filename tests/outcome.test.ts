@@ -2,14 +2,17 @@ import {assert, expect} from "chai";
 import {describe, it} from "mocha";
 import {Board} from "../src/Board";
 import {Move} from "../src/Move";
-import {Col, Location, Row} from "../src/Position";
-import {assertError} from "./common.test";
+import {Col, Location, Position, Row} from "../src/Position";
+import {assertError, ConfigurableOutcomeEngine} from "./common.test";
 import {Pawn} from "../src/Pawn";
 import {Knight} from "../src/Knight";
 import {Bishop} from "../src/Bishop";
 import {Rook} from "../src/Rook";
 import {Queen} from "../src/Queen";
 import {King} from "../src/King";
+import {Check, CheckMate} from "../src/Outcome";
+import {ChessMeGame} from "../src/ChessMeGame";
+import {Color, Player} from "../src/Player";
 
 describe("pawn outcome scenarios", function () {
     it("pawn can first time only move 2 locations up", function () {
@@ -321,5 +324,29 @@ describe("knight outcome scenarios", function () {
         assert.equal(board.defeatedPieces.length, initialSize + 2);
         expect(out1.defeatedPosition.piece instanceof Pawn).to.be.true;
         expect(out2.defeatedPosition.piece instanceof King).to.be.true;
+    });
+});
+
+describe("game chheck and checkMate", function () {
+    let players = new Array<Player>();
+    players.push(new Player("p1", Color.WHITE))
+    players.push(new Player("p2", Color.BLACK))
+
+    it("game stops when king is defeated, outcome is CheckMate", function () {
+        let firstPlayer = players[0];
+        let secondPlayer = players[1];
+        let configuredOutcome = new CheckMate();
+        configuredOutcome.defeatedPosition = new Position(Location.from(Row.ONE, Col.B), new King(secondPlayer.color));
+        let game = new ChessMeGame(new Board(new ConfigurableOutcomeEngine(configuredOutcome)), players);
+
+        let outcome = game.move(firstPlayer, new Move(Location.from(Row.ONE, Col.A), Location.from(Row.ONE, Col.B)));
+
+        expect(game.status.valueOf()).contains("stop");
+        expect(outcome instanceof CheckMate).to.be.true;
+        expect(outcome.winner.name).equals(firstPlayer.name);
+    });
+
+    it("when king is in danger, outcome is Check", function () {
+        throw new Error("Not implemented");
     });
 });

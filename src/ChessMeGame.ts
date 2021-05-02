@@ -8,8 +8,9 @@ import {
     TooManyPlayersError
 } from "./errors";
 import {Board} from "./Board";
-import {Outcome} from "./Outcome";
+import {Check, CheckMate, Outcome} from "./Outcome";
 import {Move} from "./Move";
+import {King} from "./King";
 
 enum GameStatus {
     STARTED = "started",
@@ -57,7 +58,16 @@ export class ChessMeGame {
         let outcome = this._board.calculateOutcome(move);
         player.addMove(move);
         this.switchPlayerToMove(player);
-        // TODO: based on outcome, check if game finished, set it stopped and show winner?
+
+        if (outcome instanceof Check) {
+            outcome.winningPlayer = player;
+        }
+
+        if (outcome instanceof CheckMate) {
+            this.stop();
+            outcome.winner = player;
+        }
+
         return outcome;
     }
 
