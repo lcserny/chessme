@@ -24,6 +24,7 @@ export class SimpleOutcomeEngine implements OutcomeEngine {
                 if (targetPosition.piece instanceof King) {
                     outcome = new CheckMate();
                 }
+                // TODO: all info is here to determine if Check, but calculation is complex...
                 outcome.defeatedPosition = targetPosition;
             }
             return outcome;
