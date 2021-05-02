@@ -346,6 +346,7 @@ describe("check and checkMate", function () {
         expect(outcome.winner.name).equals(firstPlayer.name);
     });
 
+    // TODO: how to know when king is in danger?
     it("when king is in danger, outcome is Check", function () {
         throw new Error("Not implemented");
     });
