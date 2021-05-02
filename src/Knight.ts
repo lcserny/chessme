@@ -1,9 +1,13 @@
 import {Piece} from "./Piece";
-import {Location} from "./Position";
+import {Location, Positions} from "./Position";
 
 export class Knight extends Piece {
 
-    availableMoves(currentLocation: Location): Array<Location> {
-        return undefined;
+    protected availableMovesBlack(currentLocation: Location, positions: Positions): Array<Location> {
+        return null;
+    }
+
+    protected availableMovesWhite(currentLocation: Location, positions: Positions): Array<Location> {
+        return null;
     }
 }

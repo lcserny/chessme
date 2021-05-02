@@ -8,6 +8,7 @@ import {Pawn} from "../src/Pawn";
 import {Knight} from "../src/Knight";
 import {Bishop} from "../src/Bishop";
 import {Rook} from "../src/Rook";
+import {Queen} from "../src/Queen";
 
 describe("pawn outcome scenarios", function () {
     it("pawn can first time only move 2 locations up", function () {
@@ -198,5 +199,81 @@ describe("bishop outcome scenarios", function () {
         assert.equal(board.defeatedPieces.length, initialSize + 2);
         expect(out1.defeatedPosition.piece instanceof Pawn).to.be.true;
         expect(out2.defeatedPosition.piece instanceof Rook).to.be.true;
+    });
+});
+
+// TODO
+describe("king outcome scenarios", function () {
+    it("king can be moved one unoccupied square vertically", function () {
+        let board = new Board();
+        board.positions.move(Location.from(Row.SEVEN, Col.E), Location.from(Row.FIVE, Col.E));
+        board.positions.move(Location.from(Row.TWO, Col.E), Location.from(Row.THREE, Col.E));
+        board.positions.move(Location.from(Row.ONE, Col.E), Location.from(Row.FOUR, Col.E));
+
+        board.calculateOutcome(new Move(Location.from(Row.FOUR, Col.E), Location.from(Row.FIVE, Col.E)));
+        board.calculateOutcome(new Move(Location.from(Row.FIVE, Col.E), Location.from(Row.FOUR, Col.E)));
+
+        assertError("IllegalMoveError", function () {
+            board.calculateOutcome(new Move(Location.from(Row.FOUR, Col.E), Location.from(Row.THREE, Col.E)));
+        });
+
+        board.calculateOutcome(new Move(Location.from(Row.FOUR, Col.E), Location.from(Row.FIVE, Col.E)));
+
+        assertError("IllegalMoveError", function () {
+            board.calculateOutcome(new Move(Location.from(Row.FIVE, Col.E), Location.from(Row.THREE, Col.E)));
+        });
+    });
+
+    it("king can be moved one unoccupied square horizontally", function () {
+        let board = new Board();
+        board.positions.move(Location.from(Row.SEVEN, Col.E), Location.from(Row.FOUR, Col.D));
+        board.positions.move(Location.from(Row.TWO, Col.E), Location.from(Row.FOUR, Col.F));
+        board.positions.move(Location.from(Row.ONE, Col.E), Location.from(Row.FOUR, Col.E));
+
+        board.calculateOutcome(new Move(Location.from(Row.FOUR, Col.E), Location.from(Row.FOUR, Col.D)));
+        board.calculateOutcome(new Move(Location.from(Row.FOUR, Col.D), Location.from(Row.FOUR, Col.E)));
+
+        assertError("IllegalMoveError", function () {
+            board.calculateOutcome(new Move(Location.from(Row.FOUR, Col.E), Location.from(Row.FOUR, Col.F)));
+        });
+
+        board.calculateOutcome(new Move(Location.from(Row.FOUR, Col.E), Location.from(Row.FOUR, Col.D)));
+
+        assertError("IllegalMoveError", function () {
+            board.calculateOutcome(new Move(Location.from(Row.FOUR, Col.D), Location.from(Row.FOUR, Col.F)));
+        });
+    });
+
+    it("king can be moved one unoccupied square diagonally", function () {
+        let board = new Board();
+        board.positions.move(Location.from(Row.ONE, Col.E), Location.from(Row.FOUR, Col.E));
+        board.positions.move(Location.from(Row.SEVEN, Col.C), Location.from(Row.FIVE, Col.D));
+
+        assertError("IllegalMoveError", function () {
+            board.calculateOutcome(new Move(Location.from(Row.FOUR, Col.E), Location.from(Row.TWO, Col.C)));
+        });
+
+        board.calculateOutcome(new Move(Location.from(Row.FOUR, Col.E), Location.from(Row.FIVE, Col.D)));
+
+        assertError("IllegalMoveError", function () {
+            board.calculateOutcome(new Move(Location.from(Row.FIVE, Col.D), Location.from(Row.SEVEN, Col.F)));
+        });
+    });
+
+    it("if enemy piece in its path, the king stop there and captures it", function () {
+        let board = new Board();
+        board.positions.move(Location.from(Row.ONE, Col.E), Location.from(Row.FOUR, Col.E));
+        board.positions.move(Location.from(Row.EIGHT, Col.D), Location.from(Row.FIVE, Col.D));
+
+        let initialSize = board.defeatedPieces.length;
+
+        assertError("IllegalMoveError", function () {
+            board.calculateOutcome(new Move(Location.from(Row.FOUR, Col.E), Location.from(Row.TWO, Col.C)));
+        });
+
+        let out1 = board.calculateOutcome(new Move(Location.from(Row.FOUR, Col.E), Location.from(Row.FIVE, Col.D)));
+
+        assert.equal(board.defeatedPieces.length, initialSize + 1);
+        expect(out1.defeatedPosition.piece instanceof Queen).to.be.true;
     });
 });

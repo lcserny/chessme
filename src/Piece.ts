@@ -25,7 +25,7 @@ export abstract class Piece {
     protected abstract availableMovesWhite(currentLocation: Location, positions: Positions): Array<Location>;
     protected abstract availableMovesBlack(currentLocation: Location, positions: Positions): Array<Location>;
 
-    protected getAllDirection(currentLocation: Location, positions: Positions, locMove: LocationMove): Array<Location> {
+    protected getAllDirection(currentLocation: Location, positions: Positions, locMove: LocationMove, oneMoveOnly = false): Array<Location> {
         let results = new Array<Location>();
 
         let current = Location.from(currentLocation.row, currentLocation.col);
@@ -49,6 +49,11 @@ export abstract class Piece {
             }
 
             current = advanced;
+
+            if (oneMoveOnly) {
+                tryDirection = false;
+                break;
+            }
         }
 
         return results;
