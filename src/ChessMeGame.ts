@@ -52,15 +52,13 @@ export class ChessMeGame {
         }
 
         this.checkPlayerIsPlaying(player);
-        if (this._playerToMove != null && this._playerToMove.name == player.name) {
-            let outcome = this._board.calculateOutcome(move);
-            player.addMove(move);
-            this.switchPlayerToMove(player);
-            // TODO: based on outcome, check if game finished, set it stopped and show winner?
-            return outcome;
-        }
+        this.checkPlayerTurn(player);
 
-        throw new PlayerTurnError("Not player's turn to move");
+        let outcome = this._board.calculateOutcome(move);
+        player.addMove(move);
+        this.switchPlayerToMove(player);
+        // TODO: based on outcome, check if game finished, set it stopped and show winner?
+        return outcome;
     }
 
     private start(): void {
@@ -123,6 +121,12 @@ export class ChessMeGame {
                 }
             }
             this.start();
+        }
+    }
+
+    private checkPlayerTurn(player: Player) {
+        if (this._playerToMove != null && this._playerToMove.name != player.name) {
+            throw new PlayerTurnError("Not player's turn to move");
         }
     }
 }
