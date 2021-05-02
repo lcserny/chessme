@@ -4,5 +4,5 @@
 **/node_modules
 **/.nyc_output
 **/coverage
-src/**/*.js
-tests/**/*.js
+src/**/*.js*
+tests/**/*.js*

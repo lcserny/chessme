@@ -1,6 +1,8 @@
 import {Color} from "./Player";
 import {Location, Positions} from "./Position";
 
+export type LocationMove = (x: Location) => Location;
+
 export abstract class Piece {
 
     private readonly _playerColor: Color;
@@ -22,4 +24,33 @@ export abstract class Piece {
 
     protected abstract availableMovesWhite(currentLocation: Location, positions: Positions): Array<Location>;
     protected abstract availableMovesBlack(currentLocation: Location, positions: Positions): Array<Location>;
+
+    protected getAllDirection(currentLocation: Location, positions: Positions, locMove: LocationMove): Array<Location> {
+        let results = new Array<Location>();
+
+        let current = Location.from(currentLocation.row, currentLocation.col);
+        let tryDirection = true;
+
+        while (tryDirection) {
+            let advanced = locMove(current);
+            if (advanced == current) {
+                tryDirection = false;
+                break;
+            }
+
+            let pos = positions.getPosition(advanced);
+            if (pos != null) {
+                tryDirection = false;
+                if (pos.hasPiece() && pos.piece.playerColor != this.playerColor) {
+                    results.push(advanced);
+                }
+            } else {
+                results.push(advanced);
+            }
+
+            current = advanced;
+        }
+
+        return results;
+    }
 }

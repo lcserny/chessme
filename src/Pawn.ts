@@ -1,28 +1,28 @@
-import {Piece} from "./Piece";
+import {LocationMove, Piece} from "./Piece";
 import {Location, Positions, Row} from "./Position";
 
 export class Pawn extends Piece {
 
     availableMovesBlack(currentLocation: Location, positions: Positions): Array<Location> {
-        let belowOne = currentLocation.down();
-        let belowTwo = belowOne.down();
-        return this.availableMovesInternal(currentLocation, positions, belowOne, belowTwo, Row.SEVEN);
+        return this.availableMovesInternal(currentLocation, positions, x => x.down(), Row.SEVEN);
     }
 
     availableMovesWhite(currentLocation: Location, positions: Positions): Array<Location> {
-        let aboveOne = currentLocation.up();
-        let aboveTwo = aboveOne.up();
-        return this.availableMovesInternal(currentLocation, positions, aboveOne, aboveTwo, Row.TWO);
+        return this.availableMovesInternal(currentLocation, positions, x => x.up(), Row.TWO);
     }
 
-    private availableMovesInternal(currentLocation: Location, positions: Positions, advancedOne: Location, advancedTwo: Location, initRow: Row): Array<Location> {
+    private availableMovesInternal(currentLocation: Location, positions: Positions, locMove: LocationMove, initRow: Row): Array<Location> {
         let moves = new Array<Location>();
+
+        let current = Location.from(currentLocation.row, currentLocation.col);
+        let advancedOne = locMove(current);
 
         let advancedOnePos = positions.getPosition(advancedOne);
         if (advancedOnePos == null || !advancedOnePos.hasPiece()) {
             moves.push(advancedOne);
         }
 
+        let advancedTwo = locMove(advancedOne);
         let advancedTwoPos = positions.getPosition(advancedTwo);
         if (currentLocation.row == initRow && (advancedTwoPos == null || !advancedTwoPos.hasPiece())) {
             moves.push(advancedTwo);
