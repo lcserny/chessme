@@ -42,7 +42,7 @@ export class ChessMeGame {
         this.checkPlayerTeams();
     }
 
-    start(): void {
+    private start(): void {
         if (this._players.length != 2) {
             throw new NoPlayersError("No players joined the game");
         }
@@ -52,7 +52,7 @@ export class ChessMeGame {
         this._status = GameStatus.STARTED;
     }
 
-    stop(): void {
+    private stop(): void {
         if (this._status == GameStatus.STOPPED) {
             throw new GameStatusError("Game already stopped");
         }
@@ -122,6 +122,7 @@ export class ChessMeGame {
                     break
                 }
             }
+            this.start();
         }
     }
 }

@@ -22,49 +22,9 @@ describe("game statuses", function () {
         expect(game.status.valueOf()).equals("pending");
     });
 
-    it("game can be started", function () {
+    it("game with players is started", function () {
         let game = new ChessMeGame(board, players);
-
-        game.start();
-
         expect(game.status.valueOf()).contains("start");
-    });
-
-    it("game can be stopped", function () {
-        let game = new ChessMeGame(board, players);
-
-        game.start();
-        game.stop();
-
-        expect(game.status.valueOf()).contains("stop");
-    });
-
-    it("game can be started only once", function () {
-        let game = new ChessMeGame(board, players);
-
-        game.start();
-
-        assertError("GameStatusError", function () {
-            game.start();
-        });
-    });
-
-    it("game can be stopped only once", function () {
-        let game = new ChessMeGame(board, players);
-
-        game.start();
-        game.stop();
-
-        assertError("GameStatusError", function () {
-            game.stop();
-        });
-    });
-
-    it("game cannot be started without two players", function () {
-        let game = new ChessMeGame(board);
-        assertError("NoPlayersError", function () {
-            game.start();
-        });
     });
 });
 
@@ -116,7 +76,6 @@ describe("game players", function () {
         let player3 = new Player("c", Color.WHITE);
         let game = new ChessMeGame(new Board(), new Array<Player>(player2, player1));
         let move = new Move(Location.from(Row.ONE, Col.A), Location.from(Row.TWO, Col.A));
-        game.start()
 
         assertError("PlayerNotInGameError", function () {
             game.move(player3, move);
@@ -128,7 +87,6 @@ describe("game players", function () {
         let player2 = new Player("b", Color.BLACK);
         let game = new ChessMeGame(new Board(new MockOutcomeEngine()), new Array<Player>(player2, player1));
         let move = new Move(Location.from(Row.ONE, Col.A), Location.from(Row.TWO, Col.A));
-        game.start();
 
         let outcome = game.move(player1, move);
 
@@ -140,7 +98,6 @@ describe("game players", function () {
         let player2 = new Player("b", Color.BLACK);
         let game = new ChessMeGame(new Board(), new Array<Player>(player1, player2));
         let move = new Move(Location.from(Row.ONE, Col.A), Location.from(Row.TWO, Col.A));
-        game.start();
 
         assertError("PlayerTurnError", function () {
             game.move(player2, move);
@@ -152,7 +109,6 @@ describe("game players", function () {
         let player2 = new Player("b", Color.BLACK);
         let game = new ChessMeGame(new Board(new MockOutcomeEngine()), new Array<Player>(player1, player2));
         let move = new Move(Location.from(Row.ONE, Col.A), Location.from(Row.TWO, Col.A));
-        game.start();
 
         game.move(player1, move);
 
