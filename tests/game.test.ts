@@ -162,6 +162,8 @@ describe("game players", function () {
     });
 });
 
+// TODO: test checked state and check mate
+
 class MockOutcomeEngine implements OutcomeEngine {
 
     calculateOutcome(positions: Positions, defeatedPieces: Array<Piece>, move: Move): Outcome {

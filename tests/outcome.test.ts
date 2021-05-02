@@ -9,6 +9,7 @@ import {Knight} from "../src/Knight";
 import {Bishop} from "../src/Bishop";
 import {Rook} from "../src/Rook";
 import {Queen} from "../src/Queen";
+import {King} from "../src/King";
 
 describe("pawn outcome scenarios", function () {
     it("pawn can first time only move 2 locations up", function () {
@@ -202,7 +203,6 @@ describe("bishop outcome scenarios", function () {
     });
 });
 
-// TODO
 describe("king outcome scenarios", function () {
     it("king can be moved one unoccupied square vertically", function () {
         let board = new Board();
@@ -275,5 +275,51 @@ describe("king outcome scenarios", function () {
 
         assert.equal(board.defeatedPieces.length, initialSize + 1);
         expect(out1.defeatedPosition.piece instanceof Queen).to.be.true;
+    });
+});
+
+describe("knight outcome scenarios", function () {
+    it("knight can be moved in L shapes only, if square not occupied and board allows", function () {
+        let board = new Board();
+
+        board.calculateOutcome(new Move(Location.from(Row.ONE, Col.B), Location.from(Row.THREE, Col.C)));
+
+        assertError("IllegalMoveError", function () {
+            board.calculateOutcome(new Move(Location.from(Row.THREE, Col.C), Location.from(Row.TWO, Col.E)));
+        });
+
+        assertError("IllegalMoveError", function () {
+            board.calculateOutcome(new Move(Location.from(Row.THREE, Col.C), Location.from(Row.THREE, Col.B)));
+        });
+
+        assertError("IllegalMoveError", function () {
+            board.calculateOutcome(new Move(Location.from(Row.THREE, Col.C), Location.from(Row.FOUR, Col.B)));
+        });
+
+        assertError("IllegalMoveError", function () {
+            board.calculateOutcome(new Move(Location.from(Row.THREE, Col.C), Location.from(Row.TWO, Col.E)));
+        });
+
+        board.calculateOutcome(new Move(Location.from(Row.THREE, Col.C), Location.from(Row.FOUR, Col.A)));
+
+        assertError("IllegalMoveError", function () {
+            board.calculateOutcome(new Move(Location.from(Row.FOUR, Col.A), Location.from(Row.TWO, Col.B)));
+        });
+
+        board.calculateOutcome(new Move(Location.from(Row.FOUR, Col.A), Location.from(Row.SIX, Col.B)));
+    });
+
+    it("if enemy piece in its target location, the knight captures it", function () {
+        let board = new Board();
+        let initialSize = board.defeatedPieces.length;
+
+        board.calculateOutcome(new Move(Location.from(Row.ONE, Col.B), Location.from(Row.THREE, Col.C)));
+        board.calculateOutcome(new Move(Location.from(Row.THREE, Col.C), Location.from(Row.FIVE, Col.B)));
+        let out1 = board.calculateOutcome(new Move(Location.from(Row.FIVE, Col.B), Location.from(Row.SEVEN, Col.C)));
+        let out2 = board.calculateOutcome(new Move(Location.from(Row.SEVEN, Col.C), Location.from(Row.EIGHT, Col.E)));
+
+        assert.equal(board.defeatedPieces.length, initialSize + 2);
+        expect(out1.defeatedPosition.piece instanceof Pawn).to.be.true;
+        expect(out2.defeatedPosition.piece instanceof King).to.be.true;
     });
 });
