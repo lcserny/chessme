@@ -327,7 +327,7 @@ describe("knight outcome scenarios", function () {
     });
 });
 
-describe("game chheck and checkMate", function () {
+describe("check and checkMate", function () {
     let players = new Array<Player>();
     players.push(new Player("p1", Color.WHITE))
     players.push(new Player("p2", Color.BLACK))
