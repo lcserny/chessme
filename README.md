@@ -18,8 +18,8 @@ to bundle your application
 - use webpack server to auto-refresh dev work
   
 ### Roadmap
-1. no UI needed, console game, return each chess board position occupation and game status
-2. later on allow commands given from outside 
-3. game will need to be converted to a grpc server and allow commands as grpc requests
-4. game will need to persist data in mongodb
+1. no UI needed, console game at first
+2. later on allow commands given from outside (as gRPS or similar) 
+3. game will need to act as a server and persist data in mongodb
+4. game can be moved to AWS Lambda or similar
 5. after all this, Android clients can be made to play

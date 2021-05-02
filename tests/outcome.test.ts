@@ -3,6 +3,7 @@ import {describe, it} from "mocha";
 import {Board} from "../src/Board";
 import {Move} from "../src/Move";
 import {Col, Location, Row} from "../src/Position";
+import {assertError} from "./common.test";
 
 describe("pawn outcome scenarios", function () {
     it("pawn can first time only move 2 locations up", function () {
@@ -15,14 +16,9 @@ describe("pawn outcome scenarios", function () {
         let board = new Board();
 
         board.calculateOutcome(new Move(Location.from(Row.TWO, Col.B), Location.from(Row.THREE, Col.B)));
-        let err = new Error();
-        try {
+        assertError("IllegalMoveError", function () {
             board.calculateOutcome(new Move(Location.from(Row.THREE, Col.B), Location.from(Row.FIVE, Col.B)));
-        } catch (e) {
-            err = e;
-        }
-
-        assert.equal(err.name, "IllegalMoveError")
+        });
     });
 
     it("pawn can move 1 location up", function () {
@@ -39,14 +35,10 @@ describe("pawn outcome scenarios", function () {
         let board = new Board();
 
         board.positions.move(Location.from(Row.TWO, Col.B), Location.from(Row.SIX, Col.B))
-        let err = new Error();
-        try {
-            board.calculateOutcome(new Move(Location.from(Row.SIX, Col.B), Location.from(Row.SEVEN, Col.B)));
-        } catch (e) {
-            err = e;
-        }
 
-        assert.equal(err.name, "IllegalMoveError")
+        assertError("IllegalMoveError", function () {
+            board.calculateOutcome(new Move(Location.from(Row.SIX, Col.B), Location.from(Row.SEVEN, Col.B)));
+        });
     });
 
     it("pawn moves 1 location over enemy and defeats it", function () {
@@ -64,7 +56,31 @@ describe("pawn outcome scenarios", function () {
 });
 
 describe("queen outcome scenarios", function () {
-    it("", function () {
+    it("queen can be moved any number of unoccupied squares in a straight line vertically", function () {
+        let board = new Board();
+        board.positions.removePosition(board.positions.getPosition(Location.from(Row.SEVEN, Col.D)));
+        board.positions.move(Location.from(Row.TWO, Col.D), Location.from(Row.SEVEN, Col.D));
+        board.positions.move(Location.from(Row.ONE, Col.D), Location.from(Row.FOUR, Col.D));
+
+        board.calculateOutcome(new Move(Location.from(Row.FOUR, Col.D), Location.from(Row.SIX, Col.D)));
+        board.calculateOutcome(new Move(Location.from(Row.SIX, Col.D), Location.from(Row.THREE, Col.D)));
+
+        assertError("IllegalMoveError", function () {
+            board.calculateOutcome(new Move(Location.from(Row.THREE, Col.D), Location.from(Row.SEVEN, Col.D)));
+        });
+    });
+
+    it("queen can be moved any number of unoccupied squares in a straight line horizontally", function () {
+        let board = new Board();
+
+    });
+
+    it("queen can be moved any number of unoccupied squares in a straight line diagonally", function () {
+        let board = new Board();
+
+    });
+
+    it("if enemy piece in its path, the queen stop there and captures it", function () {
         let board = new Board();
 
     });

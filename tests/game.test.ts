@@ -1,14 +1,15 @@
 import {assert, expect} from "chai";
 import {describe, it} from "mocha";
 import {ChessMeGame} from "../src/ChessMeGame";
-import {Player, Color} from "../src/Player";
+import {Color, Player} from "../src/Player";
 import {Board} from "../src/Board";
 import {Move} from "../src/Move";
-import {Col, Location, Position, Positions, Row} from "../src/Position";
+import {Col, Location, Positions, Row} from "../src/Position";
 import {GameStatusError} from "../src/errors";
 import {OutcomeEngine} from "../src/OutcomeEngine";
 import {Piece} from "../src/Piece";
 import {Outcome} from "../src/Outcome";
+import {assertError} from "./common.test";
 
 describe("game statuses", function () {
     let board = new Board();
@@ -43,13 +44,9 @@ describe("game statuses", function () {
 
         game.start();
 
-        let error = new Error();
-        try {
+        assertError("GameStatusError", function () {
             game.start();
-        } catch (e) {
-            error = e;
-        }
-        expect(error.name).equals("GameStatusError");
+        });
     });
 
     it("game can be stopped only once", function () {
@@ -58,24 +55,16 @@ describe("game statuses", function () {
         game.start();
         game.stop();
 
-        let error = new Error();
-        try {
+        assertError("GameStatusError", function () {
             game.stop();
-        } catch (e) {
-            error = e;
-        }
-        expect(error.name).equals("GameStatusError");
+        });
     });
 
     it("game cannot be started without two players", function () {
         let game = new ChessMeGame(board);
-        let error = new Error();
-        try {
+        assertError("NoPlayersError", function () {
             game.start();
-        } catch (e) {
-            error = e;
-        }
-        expect(error.name).equals("NoPlayersError");
+        });
     });
 });
 
@@ -86,13 +75,9 @@ describe("game players", function () {
         game.join(new Player("p1", Color.BLACK));
         game.join(new Player("p2", Color.WHITE));
 
-        let error = new Error();
-        try {
+        assertError("TooManyPlayersError", function () {
             game.join(new Player("p3", Color.BLACK));
-        } catch (e) {
-            error = e;
-        }
-        expect(error.name).equals("TooManyPlayersError");
+        });
     });
 
     it("players joining the game need to be of different colors", function () {
@@ -100,13 +85,9 @@ describe("game players", function () {
         let game = new ChessMeGame(board);
         game.join(new Player("p1", Color.WHITE));
 
-        let error = new Error();
-        try {
+        assertError("SamePlayerTeamError", function () {
             game.join(new Player("p2", Color.WHITE));
-        } catch (e) {
-            error = e;
-        }
-        expect(error.name).equals("SamePlayerTeamError");
+        });
     });
 
     it("players joining the game need to have different names", function () {
@@ -114,13 +95,9 @@ describe("game players", function () {
         let game = new ChessMeGame(board);
         game.join(new Player("p1", Color.WHITE));
 
-        let error = new Error();
-        try {
+        assertError("PlayerNameExistsError", function () {
             game.join(new Player("p1", Color.BLACK));
-        } catch (e) {
-            error = e;
-        }
-        expect(error.name).equals("PlayerNameExistsError");
+        });
     });
 
     it("game throws error when executing move if not started", function () {
@@ -128,13 +105,9 @@ describe("game players", function () {
         let player = new Player("a", Color.WHITE);
         let move = new Move(Location.from(Row.ONE, Col.A), Location.from(Row.TWO, Col.A));
 
-        let error = new Error();
-        try {
+        assertError("GameStatusError", function () {
             game.move(player, move);
-        } catch (e) {
-            error = e;
-        }
-        expect(error.name).equals("GameStatusError");
+        });
     });
 
     it("game throws error when executing move of unknown player", function () {
@@ -145,13 +118,9 @@ describe("game players", function () {
         let move = new Move(Location.from(Row.ONE, Col.A), Location.from(Row.TWO, Col.A));
         game.start()
 
-        let error = new Error();
-        try {
+        assertError("PlayerNotInGameError", function () {
             game.move(player3, move);
-        } catch (e) {
-            error = e;
-        }
-        expect(error.name).equals("PlayerNotInGameError");
+        });
     });
 
     it("game executes move for player", function () {
@@ -173,13 +142,9 @@ describe("game players", function () {
         let move = new Move(Location.from(Row.ONE, Col.A), Location.from(Row.TWO, Col.A));
         game.start();
 
-        let error = new Error();
-        try {
+        assertError("PlayerTurnError", function () {
             game.move(player2, move);
-        } catch (e) {
-            error = e;
-        }
-        expect(error.name).equals("PlayerTurnError");
+        });
     });
 
     it("game switches player turn allowed after move", function () {
@@ -191,13 +156,9 @@ describe("game players", function () {
 
         game.move(player1, move);
 
-        let error = new Error();
-        try {
+        assertError("PlayerTurnError", function () {
             game.move(player1, move);
-        } catch (e) {
-            error = e;
-        }
-        expect(error.name).equals("PlayerTurnError");
+        });
     });
 });
 
