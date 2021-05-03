@@ -8,9 +8,8 @@ import {
     TooManyPlayersError
 } from "./errors";
 import {Board} from "./Board";
-import {Check, CheckMate, Outcome} from "./Outcome";
+import {Outcome} from "./Outcome";
 import {Move} from "./Move";
-import {King} from "./King";
 
 enum GameStatus {
     STARTED = "started",
