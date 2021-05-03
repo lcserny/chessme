@@ -60,8 +60,7 @@ export class SimpleOutcomeEngine implements OutcomeEngine {
         }*/
 
         let enemyKingPosition = positions.findPositionOf(King, reverseColor(playerColor));
-        let endMovePosition = new Position(move.target, positions.getPosition(move.source).piece);
-        let availableMoves = endMovePosition.piece.availableMoves(endMovePosition.location, positions);
+        let availableMoves = positions.getPosition(move.source).piece.availableMoves(move.target, positions);
         for (let availableMove of availableMoves) {
             if (availableMove.row == enemyKingPosition.location.row && availableMove.col == enemyKingPosition.location.col) {
                 return new Check(playerColor);
