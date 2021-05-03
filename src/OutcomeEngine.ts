@@ -1,10 +1,10 @@
-import { Positions} from "./Position";
+import {Location, Position, Positions} from "./Position";
 import {Move} from "./Move";
 import {Check, CheckMate, Outcome} from "./Outcome";
 import {Piece} from "./Piece";
 import {IllegalMoveError} from "./errors";
 import {King} from "./King";
-import {Player} from "./Player";
+import {Color, Player, reverseColor} from "./Player";
 
 export interface OutcomeEngine {
     calculateOutcome(player: Player, move: Move, positions: Positions): Outcome;
@@ -14,15 +14,13 @@ export class SimpleOutcomeEngine implements OutcomeEngine {
 
     calculateOutcome(player: Player, move: Move, positions: Positions): Outcome {
         if (this.isMoveAllowed(positions, move)) {
-            let source = move.source;
-            let target = move.target;
-
             let outcome = new Outcome();
-            let sourcePosition = positions.getPosition(source);
-            let targetPosition = positions.getPosition(target);
+            outcome = this.parseCheck(player, move, positions, outcome);
 
+            let sourcePosition = positions.getPosition(move.source);
+            let targetPosition = positions.getPosition(move.target);
             if (targetPosition != null && targetPosition.hasPiece() && targetPosition.piece.playerColor != sourcePosition.piece.playerColor) {
-                outcome = this.parseCheckStates(targetPosition.piece, outcome, player, move, positions);
+                outcome = this.parseCheckMate(targetPosition.piece, outcome, player);
                 outcome.defeatedPosition = targetPosition;
             }
 
@@ -32,15 +30,24 @@ export class SimpleOutcomeEngine implements OutcomeEngine {
         throw new IllegalMoveError("Move not allowed");
     }
 
-    private parseCheckStates(defeatedPiece: Piece, outcome: Outcome, player: Player, move: Move, positions: Positions): Outcome {
+    private parseCheckMate(defeatedPiece: Piece, outcome: Outcome, player: Player): Outcome {
         if (defeatedPiece instanceof King) {
-            return  new CheckMate(player);
+            return new CheckMate(player);
         }
+        return outcome;
+    }
 
-        // TODO: all info is here to determine if Check, but calculation is complex...
-        // if (check state) {
-        //     outcome = new Check(player);
-        // }
+    // TODO: when player moves, player might be checked instead of enemy
+    private parseCheck(player: Player, move: Move, positions: Positions, outcome: Outcome): Outcome {
+        let endMovePosition = new Position(move.target, positions.getPosition(move.source).piece);
+        let enemyKingPosition = positions.findPositionOf(King, reverseColor(player.color));
+
+        let availableMoves = endMovePosition.piece.availableMoves(endMovePosition.location, positions);
+        for (let availableMove of availableMoves) {
+            if (availableMove.row == enemyKingPosition.location.row && availableMove.col == enemyKingPosition.location.col) {
+                return new Check(player);
+            }
+        }
 
         return outcome;
     }

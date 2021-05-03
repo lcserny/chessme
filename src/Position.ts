@@ -6,6 +6,7 @@ import {Bishop} from "./Bishop";
 import {Queen} from "./Queen";
 import {King} from "./King";
 import {Pawn} from "./Pawn";
+import {PieceNotFoundError} from "./errors";
 
 export enum Row {
     ONE,
@@ -166,6 +167,15 @@ export class Positions {
 
     length(): number {
         return this._positions.length;
+    }
+
+    findPositionOf(pieceClass: typeof Piece, color: Color): Position {
+        for (let position of this._positions) {
+            if (position.hasPiece() && position.piece instanceof pieceClass && position.piece.playerColor == color) {
+                return position;
+            }
+        }
+        throw new PieceNotFoundError("Could not find piece");
     }
 
     addPosition(position: Position) {

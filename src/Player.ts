@@ -5,6 +5,13 @@ export enum Color {
     BLACK = "black"
 }
 
+export function reverseColor(color: Color): Color {
+    if (color == Color.WHITE) {
+        return Color.BLACK;
+    }
+    return Color.WHITE;
+}
+
 export class Player {
 
     private readonly _name: string;
