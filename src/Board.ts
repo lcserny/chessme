@@ -3,6 +3,7 @@ import {OutcomeEngine, SimpleOutcomeEngine} from "./OutcomeEngine";
 import {Outcome} from "./Outcome";
 import {Move} from "./Move";
 import {Piece} from "./Piece";
+import {Player} from "./Player";
 
 export class Board {
 
@@ -24,8 +25,8 @@ export class Board {
         return this._defeatedPieces;
     }
 
-    calculateOutcome(move: Move): Outcome {
-        let outcome = this._outcomeEngine.calculateOutcome(this.positions, this.defeatedPieces, move);
+    calculateOutcome(player: Player, move: Move): Outcome {
+        let outcome = this._outcomeEngine.calculateOutcome(player, move, this.positions);
         this.updateBoard(move, outcome);
         return outcome;
     }

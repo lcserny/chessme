@@ -1,17 +1,18 @@
 import { Positions} from "./Position";
 import {Move} from "./Move";
-import {CheckMate, Outcome} from "./Outcome";
+import {Check, CheckMate, Outcome} from "./Outcome";
 import {Piece} from "./Piece";
 import {IllegalMoveError} from "./errors";
 import {King} from "./King";
+import {Player} from "./Player";
 
 export interface OutcomeEngine {
-    calculateOutcome(positions: Positions, defeatedPieces: Array<Piece>, move: Move): Outcome;
+    calculateOutcome(player: Player, move: Move, positions: Positions): Outcome;
 }
 
 export class SimpleOutcomeEngine implements OutcomeEngine {
 
-    calculateOutcome(positions: Positions, defeatedPieces: Array<Piece>, move: Move): Outcome {
+    calculateOutcome(player: Player, move: Move, positions: Positions): Outcome {
         if (this.isMoveAllowed(positions, move)) {
             let source = move.source;
             let target = move.target;
@@ -22,11 +23,18 @@ export class SimpleOutcomeEngine implements OutcomeEngine {
 
             if (targetPosition != null && targetPosition.hasPiece() && targetPosition.piece.playerColor != sourcePosition.piece.playerColor) {
                 if (targetPosition.piece instanceof King) {
-                    outcome = new CheckMate();
+                    outcome = new CheckMate(player);
                 }
+
                 // TODO: all info is here to determine if Check, but calculation is complex...
+                // if (outcome instanceof Check) {
+                //     outcome.winningPlayer = player;
+                // }
+
                 outcome.defeatedPosition = targetPosition;
             }
+
+            player.addMove(move);
             return outcome;
         }
         throw new IllegalMoveError("Move not allowed");

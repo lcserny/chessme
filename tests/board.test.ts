@@ -13,7 +13,7 @@ import {OutcomeEngine, SimpleOutcomeEngine} from "../src/OutcomeEngine";
 import {Piece} from "../src/Piece";
 import {Move} from "../src/Move";
 import {Outcome} from "../src/Outcome";
-import {OutcomeEngineSpy} from "./common.test";
+import {getTwoPlayers, OutcomeEngineSpy} from "./common.test";
 
 describe("board setup", function () {
     it("new boards initialize positions", function () {
@@ -95,32 +95,35 @@ describe("board setup", function () {
     });
 
     it("boards delegate calculateOutcome to outcomeEngine", function () {
+        let aPlayer = getTwoPlayers()[0];
         let outEng = new OutcomeEngineSpy();
         let board = new Board(outEng);
 
-        board.calculateOutcome(new Move(Location.from(Row.TWO, Col.B), Location.from(Row.THREE, Col.B)));
+        board.calculateOutcome(aPlayer, new Move(Location.from(Row.TWO, Col.B), Location.from(Row.THREE, Col.B)));
 
         expect(outEng.calculateOutcomeCalled).equals(1);
     });
 
     it("board is updated with defeated piece after move", function () {
+        let aPlayer = getTwoPlayers()[0];
         let board = new Board(new OutcomeEngineSpy());
 
         let initialPositionsLength = board.positions.length();
         board.positions.move(Location.from(Row.TWO, Col.B), Location.from(Row.SIX, Col.B))
-        board.calculateOutcome(new Move(Location.from(Row.SIX, Col.B), Location.from(Row.SEVEN, Col.A)));
+        board.calculateOutcome(aPlayer, new Move(Location.from(Row.SIX, Col.B), Location.from(Row.SEVEN, Col.A)));
 
         expect(board.defeatedPieces.length).equals(1);
         expect(board.positions.length()).equals(initialPositionsLength - 1);
     });
 
     it("board positions are updated after move", function () {
+        let aPlayer = getTwoPlayers()[0];
         let board = new Board(new SimpleOutcomeEngine());
         let source = Location.from(Row.TWO, Col.B);
         let target = Location.from(Row.THREE, Col.B);
 
         let sourcePiece = board.positions.getPosition(source).piece;
-        board.calculateOutcome(new Move(source, target));
+        board.calculateOutcome(aPlayer, new Move(source, target));
 
         assert.equal(board.positions.getPosition(source), null);
         expect(board.positions.getPosition(target).piece).equals(sourcePiece);

@@ -6,13 +6,11 @@ import {Board} from "../src/Board";
 import {Move} from "../src/Move";
 import {Col, Location, Row} from "../src/Position";
 import {GameStatusError} from "../src/errors";
-import {assertError, ConfigurableOutcomeEngine} from "./common.test";
+import {assertError, ConfigurableOutcomeEngine, getTwoPlayers} from "./common.test";
 
 describe("game statuses", function () {
     let board = new Board();
-    let players = new Array<Player>();
-    players.push(new Player("p1", Color.WHITE))
-    players.push(new Player("p2", Color.BLACK))
+    let players = getTwoPlayers();
 
     it("new games have pending status", function () {
         let game = new ChessMeGame(board);

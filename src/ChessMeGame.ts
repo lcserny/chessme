@@ -55,19 +55,11 @@ export class ChessMeGame {
         this.checkPlayerIsPlaying(player);
         this.checkPlayerTurn(player);
 
-        let outcome = this._board.calculateOutcome(move);
-        player.addMove(move);
-        this.switchPlayerToMove(player);
-
-        if (outcome instanceof Check) {
-            outcome.winningPlayer = player;
-        }
-
-        if (outcome instanceof CheckMate) {
+        let outcome = this._board.calculateOutcome(player, move);
+        if (outcome.checkMate) {
             this.stop();
-            outcome.winner = player;
         }
-
+        this.switchPlayerToMove(player);
         return outcome;
     }
 

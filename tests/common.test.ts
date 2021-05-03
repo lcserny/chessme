@@ -1,17 +1,17 @@
 import {assert} from "chai";
 import {OutcomeEngine, SimpleOutcomeEngine} from "../src/OutcomeEngine";
 import {Positions} from "../src/Position";
-import {Piece} from "../src/Piece";
 import {Move} from "../src/Move";
 import {Outcome} from "../src/Outcome";
+import {Color, Player} from "../src/Player";
 
 export class OutcomeEngineSpy extends SimpleOutcomeEngine{
 
     calculateOutcomeCalled = 0;
 
-    calculateOutcome(positions: Positions, defeatedPieces: Array<Piece>, move: Move): Outcome {
+    calculateOutcome(player: Player, move: Move, positions: Positions): Outcome {
         this.calculateOutcomeCalled++;
-        return super.calculateOutcome(positions, defeatedPieces, move);
+        return super.calculateOutcome(player, move, positions);
     }
 }
 
@@ -23,9 +23,16 @@ export class ConfigurableOutcomeEngine implements OutcomeEngine {
         this._outcome = outcome == null ? new Outcome() : outcome;
     }
 
-    calculateOutcome(positions: Positions, defeatedPieces: Array<Piece>, move: Move): Outcome {
+    calculateOutcome(player: Player, move: Move, positions: Positions): Outcome {
         return this._outcome;
     }
+}
+
+export function getTwoPlayers(): Array<Player> {
+    let players = new Array<Player>();
+    players.push(new Player("p1", Color.WHITE));
+    players.push(new Player("p2", Color.BLACK));
+    return players;
 }
 
 export function assertError(errName: string, func: Function): void  {

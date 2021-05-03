@@ -2,39 +2,39 @@ import {assert, expect} from "chai";
 import {describe, it} from "mocha";
 import {Board} from "../src/Board";
 import {Move} from "../src/Move";
-import {Col, Location, Position, Row} from "../src/Position";
-import {assertError, ConfigurableOutcomeEngine} from "./common.test";
+import {Col, Location, Row} from "../src/Position";
+import {assertError, ConfigurableOutcomeEngine, getTwoPlayers} from "./common.test";
 import {Pawn} from "../src/Pawn";
 import {Knight} from "../src/Knight";
 import {Bishop} from "../src/Bishop";
 import {Rook} from "../src/Rook";
 import {Queen} from "../src/Queen";
 import {King} from "../src/King";
-import {Check, CheckMate} from "../src/Outcome";
+import {CheckMate} from "../src/Outcome";
 import {ChessMeGame} from "../src/ChessMeGame";
 import {Color, Player} from "../src/Player";
 
 describe("pawn outcome scenarios", function () {
     it("pawn can first time only move 2 locations up", function () {
         let board = new Board();
-        let outcome = board.calculateOutcome(new Move(Location.from(Row.TWO, Col.B), Location.from(Row.FOUR, Col.B)));
+        let outcome = board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.TWO, Col.B), Location.from(Row.FOUR, Col.B)));
         assert.notEqual(outcome, null)
     });
 
     it("pawn cannot move 2 locations up after first move", function () {
         let board = new Board();
 
-        board.calculateOutcome(new Move(Location.from(Row.TWO, Col.B), Location.from(Row.THREE, Col.B)));
+        board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.TWO, Col.B), Location.from(Row.THREE, Col.B)));
         assertError("IllegalMoveError", function () {
-            board.calculateOutcome(new Move(Location.from(Row.THREE, Col.B), Location.from(Row.FIVE, Col.B)));
+            board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.THREE, Col.B), Location.from(Row.FIVE, Col.B)));
         });
     });
 
     it("pawn can move 1 location up", function () {
         let board = new Board();
 
-        let outcome1 = board.calculateOutcome(new Move(Location.from(Row.TWO, Col.B), Location.from(Row.THREE, Col.B)));
-        let outcome2 = board.calculateOutcome(new Move(Location.from(Row.THREE, Col.B), Location.from(Row.FOUR, Col.B)));
+        let outcome1 = board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.TWO, Col.B), Location.from(Row.THREE, Col.B)));
+        let outcome2 = board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.THREE, Col.B), Location.from(Row.FOUR, Col.B)));
 
         assert.notEqual(outcome1, null)
         assert.notEqual(outcome2, null)
@@ -46,7 +46,7 @@ describe("pawn outcome scenarios", function () {
         board.positions.move(Location.from(Row.TWO, Col.B), Location.from(Row.SIX, Col.B))
 
         assertError("IllegalMoveError", function () {
-            board.calculateOutcome(new Move(Location.from(Row.SIX, Col.B), Location.from(Row.SEVEN, Col.B)));
+            board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.SIX, Col.B), Location.from(Row.SEVEN, Col.B)));
         });
     });
 
@@ -57,7 +57,7 @@ describe("pawn outcome scenarios", function () {
         let defeatedPiece = board.positions.getPosition(Location.from(Row.SEVEN, Col.A)).piece;
 
         board.positions.move(Location.from(Row.TWO, Col.B), Location.from(Row.SIX, Col.B))
-        let outcome = board.calculateOutcome(new Move(Location.from(Row.SIX, Col.B), Location.from(Row.SEVEN, Col.A)));
+        let outcome = board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.SIX, Col.B), Location.from(Row.SEVEN, Col.A)));
 
         assert.equal(board.defeatedPieces.length, initialDefeatedPieces + 1);
         assert.equal(outcome.defeatedPosition.piece, defeatedPiece);
@@ -71,11 +71,11 @@ describe("queen outcome scenarios", function () {
         board.positions.move(Location.from(Row.TWO, Col.D), Location.from(Row.SEVEN, Col.D));
         board.positions.move(Location.from(Row.ONE, Col.D), Location.from(Row.FOUR, Col.D));
 
-        board.calculateOutcome(new Move(Location.from(Row.FOUR, Col.D), Location.from(Row.SIX, Col.D)));
-        board.calculateOutcome(new Move(Location.from(Row.SIX, Col.D), Location.from(Row.THREE, Col.D)));
+        board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.FOUR, Col.D), Location.from(Row.SIX, Col.D)));
+        board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.SIX, Col.D), Location.from(Row.THREE, Col.D)));
 
         assertError("IllegalMoveError", function () {
-            board.calculateOutcome(new Move(Location.from(Row.THREE, Col.D), Location.from(Row.SEVEN, Col.D)));
+            board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.THREE, Col.D), Location.from(Row.SEVEN, Col.D)));
         });
     });
 
@@ -85,11 +85,11 @@ describe("queen outcome scenarios", function () {
         board.positions.move(Location.from(Row.TWO, Col.D), Location.from(Row.FOUR, Col.H));
         board.positions.move(Location.from(Row.ONE, Col.D), Location.from(Row.FOUR, Col.D));
 
-        board.calculateOutcome(new Move(Location.from(Row.FOUR, Col.D), Location.from(Row.FOUR, Col.A)));
-        board.calculateOutcome(new Move(Location.from(Row.FOUR, Col.A), Location.from(Row.FOUR, Col.G)));
+        board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.FOUR, Col.D), Location.from(Row.FOUR, Col.A)));
+        board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.FOUR, Col.A), Location.from(Row.FOUR, Col.G)));
 
         assertError("IllegalMoveError", function () {
-            board.calculateOutcome(new Move(Location.from(Row.FOUR, Col.G), Location.from(Row.FOUR, Col.H)));
+            board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.FOUR, Col.G), Location.from(Row.FOUR, Col.H)));
         });
     });
 
@@ -98,12 +98,12 @@ describe("queen outcome scenarios", function () {
         board.positions.move(Location.from(Row.SEVEN, Col.B), Location.from(Row.SIX, Col.B));
         board.positions.move(Location.from(Row.ONE, Col.D), Location.from(Row.FOUR, Col.D));
 
-        board.calculateOutcome(new Move(Location.from(Row.FOUR, Col.D), Location.from(Row.THREE, Col.E)));
-        board.calculateOutcome(new Move(Location.from(Row.THREE, Col.E), Location.from(Row.SIX, Col.B)));
-        board.calculateOutcome(new Move(Location.from(Row.SIX, Col.B), Location.from(Row.FOUR, Col.D)));
+        board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.FOUR, Col.D), Location.from(Row.THREE, Col.E)));
+        board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.THREE, Col.E), Location.from(Row.SIX, Col.B)));
+        board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.SIX, Col.B), Location.from(Row.FOUR, Col.D)));
 
         assertError("IllegalMoveError", function () {
-            board.calculateOutcome(new Move(Location.from(Row.FOUR, Col.D), Location.from(Row.TWO, Col.B)));
+            board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.FOUR, Col.D), Location.from(Row.TWO, Col.B)));
         });
     });
 
@@ -115,9 +115,9 @@ describe("queen outcome scenarios", function () {
 
         let initialSize = board.defeatedPieces.length;
 
-        let out1 = board.calculateOutcome(new Move(Location.from(Row.FOUR, Col.D), Location.from(Row.SEVEN, Col.D)));
-        let out2 = board.calculateOutcome(new Move(Location.from(Row.SEVEN, Col.D), Location.from(Row.FIVE, Col.B)));
-        let out3 = board.calculateOutcome(new Move(Location.from(Row.FIVE, Col.B), Location.from(Row.FIVE, Col.F)));
+        let out1 = board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.FOUR, Col.D), Location.from(Row.SEVEN, Col.D)));
+        let out2 = board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.SEVEN, Col.D), Location.from(Row.FIVE, Col.B)));
+        let out3 = board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.FIVE, Col.B), Location.from(Row.FIVE, Col.F)));
 
         assert.equal(board.defeatedPieces.length, initialSize + 3);
         expect(out1.defeatedPosition.piece instanceof Pawn).to.be.true;
@@ -133,11 +133,11 @@ describe("rook outcome scenarios", function () {
         board.positions.move(Location.from(Row.TWO, Col.D), Location.from(Row.SEVEN, Col.D));
         board.positions.move(Location.from(Row.ONE, Col.A), Location.from(Row.FOUR, Col.D));
 
-        board.calculateOutcome(new Move(Location.from(Row.FOUR, Col.D), Location.from(Row.SIX, Col.D)));
-        board.calculateOutcome(new Move(Location.from(Row.SIX, Col.D), Location.from(Row.THREE, Col.D)));
+        board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.FOUR, Col.D), Location.from(Row.SIX, Col.D)));
+        board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.SIX, Col.D), Location.from(Row.THREE, Col.D)));
 
         assertError("IllegalMoveError", function () {
-            board.calculateOutcome(new Move(Location.from(Row.THREE, Col.D), Location.from(Row.SEVEN, Col.D)));
+            board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.THREE, Col.D), Location.from(Row.SEVEN, Col.D)));
         });
     });
 
@@ -147,11 +147,11 @@ describe("rook outcome scenarios", function () {
         board.positions.move(Location.from(Row.TWO, Col.D), Location.from(Row.FOUR, Col.H));
         board.positions.move(Location.from(Row.ONE, Col.A), Location.from(Row.FOUR, Col.D));
 
-        board.calculateOutcome(new Move(Location.from(Row.FOUR, Col.D), Location.from(Row.FOUR, Col.A)));
-        board.calculateOutcome(new Move(Location.from(Row.FOUR, Col.A), Location.from(Row.FOUR, Col.G)));
+        board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.FOUR, Col.D), Location.from(Row.FOUR, Col.A)));
+        board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.FOUR, Col.A), Location.from(Row.FOUR, Col.G)));
 
         assertError("IllegalMoveError", function () {
-            board.calculateOutcome(new Move(Location.from(Row.FOUR, Col.G), Location.from(Row.FOUR, Col.H)));
+            board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.FOUR, Col.G), Location.from(Row.FOUR, Col.H)));
         });
     });
 
@@ -161,11 +161,11 @@ describe("rook outcome scenarios", function () {
 
         let initialSize = board.defeatedPieces.length;
 
-        let out1 = board.calculateOutcome(new Move(Location.from(Row.FOUR, Col.D), Location.from(Row.SEVEN, Col.D)));
-        board.calculateOutcome(new Move(Location.from(Row.SEVEN, Col.D), Location.from(Row.FOUR, Col.D)));
-        board.calculateOutcome(new Move(Location.from(Row.FOUR, Col.D), Location.from(Row.FOUR, Col.B)));
-        let out2 = board.calculateOutcome(new Move(Location.from(Row.FOUR, Col.B), Location.from(Row.SEVEN, Col.B)));
-        let out3 = board.calculateOutcome(new Move(Location.from(Row.SEVEN, Col.B), Location.from(Row.EIGHT, Col.B)));
+        let out1 = board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.FOUR, Col.D), Location.from(Row.SEVEN, Col.D)));
+        board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.SEVEN, Col.D), Location.from(Row.FOUR, Col.D)));
+        board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.FOUR, Col.D), Location.from(Row.FOUR, Col.B)));
+        let out2 = board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.FOUR, Col.B), Location.from(Row.SEVEN, Col.B)));
+        let out3 = board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.SEVEN, Col.B), Location.from(Row.EIGHT, Col.B)));
 
         assert.equal(board.defeatedPieces.length, initialSize + 3);
         expect(out1.defeatedPosition.piece instanceof Pawn).to.be.true;
@@ -180,12 +180,12 @@ describe("bishop outcome scenarios", function () {
         board.positions.move(Location.from(Row.SEVEN, Col.B), Location.from(Row.SIX, Col.B));
         board.positions.move(Location.from(Row.ONE, Col.C), Location.from(Row.FOUR, Col.D));
 
-        board.calculateOutcome(new Move(Location.from(Row.FOUR, Col.D), Location.from(Row.THREE, Col.E)));
-        board.calculateOutcome(new Move(Location.from(Row.THREE, Col.E), Location.from(Row.SIX, Col.B)));
-        board.calculateOutcome(new Move(Location.from(Row.SIX, Col.B), Location.from(Row.FOUR, Col.D)));
+        board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.FOUR, Col.D), Location.from(Row.THREE, Col.E)));
+        board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.THREE, Col.E), Location.from(Row.SIX, Col.B)));
+        board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.SIX, Col.B), Location.from(Row.FOUR, Col.D)));
 
         assertError("IllegalMoveError", function () {
-            board.calculateOutcome(new Move(Location.from(Row.FOUR, Col.D), Location.from(Row.TWO, Col.B)));
+            board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.FOUR, Col.D), Location.from(Row.TWO, Col.B)));
         });
     });
 
@@ -196,9 +196,9 @@ describe("bishop outcome scenarios", function () {
 
         let initialSize = board.defeatedPieces.length;
 
-        let out1 = board.calculateOutcome(new Move(Location.from(Row.FOUR, Col.D), Location.from(Row.SEVEN, Col.A)));
-        board.calculateOutcome(new Move(Location.from(Row.SEVEN, Col.A), Location.from(Row.FOUR, Col.D)));
-        let out2 = board.calculateOutcome(new Move(Location.from(Row.FOUR, Col.D), Location.from(Row.EIGHT, Col.H)));
+        let out1 = board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.FOUR, Col.D), Location.from(Row.SEVEN, Col.A)));
+        board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.SEVEN, Col.A), Location.from(Row.FOUR, Col.D)));
+        let out2 = board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.FOUR, Col.D), Location.from(Row.EIGHT, Col.H)));
 
         assert.equal(board.defeatedPieces.length, initialSize + 2);
         expect(out1.defeatedPosition.piece instanceof Pawn).to.be.true;
@@ -213,17 +213,17 @@ describe("king outcome scenarios", function () {
         board.positions.move(Location.from(Row.TWO, Col.E), Location.from(Row.THREE, Col.E));
         board.positions.move(Location.from(Row.ONE, Col.E), Location.from(Row.FOUR, Col.E));
 
-        board.calculateOutcome(new Move(Location.from(Row.FOUR, Col.E), Location.from(Row.FIVE, Col.E)));
-        board.calculateOutcome(new Move(Location.from(Row.FIVE, Col.E), Location.from(Row.FOUR, Col.E)));
+        board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.FOUR, Col.E), Location.from(Row.FIVE, Col.E)));
+        board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.FIVE, Col.E), Location.from(Row.FOUR, Col.E)));
 
         assertError("IllegalMoveError", function () {
-            board.calculateOutcome(new Move(Location.from(Row.FOUR, Col.E), Location.from(Row.THREE, Col.E)));
+            board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.FOUR, Col.E), Location.from(Row.THREE, Col.E)));
         });
 
-        board.calculateOutcome(new Move(Location.from(Row.FOUR, Col.E), Location.from(Row.FIVE, Col.E)));
+        board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.FOUR, Col.E), Location.from(Row.FIVE, Col.E)));
 
         assertError("IllegalMoveError", function () {
-            board.calculateOutcome(new Move(Location.from(Row.FIVE, Col.E), Location.from(Row.THREE, Col.E)));
+            board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.FIVE, Col.E), Location.from(Row.THREE, Col.E)));
         });
     });
 
@@ -233,17 +233,17 @@ describe("king outcome scenarios", function () {
         board.positions.move(Location.from(Row.TWO, Col.E), Location.from(Row.FOUR, Col.F));
         board.positions.move(Location.from(Row.ONE, Col.E), Location.from(Row.FOUR, Col.E));
 
-        board.calculateOutcome(new Move(Location.from(Row.FOUR, Col.E), Location.from(Row.FOUR, Col.D)));
-        board.calculateOutcome(new Move(Location.from(Row.FOUR, Col.D), Location.from(Row.FOUR, Col.E)));
+        board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.FOUR, Col.E), Location.from(Row.FOUR, Col.D)));
+        board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.FOUR, Col.D), Location.from(Row.FOUR, Col.E)));
 
         assertError("IllegalMoveError", function () {
-            board.calculateOutcome(new Move(Location.from(Row.FOUR, Col.E), Location.from(Row.FOUR, Col.F)));
+            board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.FOUR, Col.E), Location.from(Row.FOUR, Col.F)));
         });
 
-        board.calculateOutcome(new Move(Location.from(Row.FOUR, Col.E), Location.from(Row.FOUR, Col.D)));
+        board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.FOUR, Col.E), Location.from(Row.FOUR, Col.D)));
 
         assertError("IllegalMoveError", function () {
-            board.calculateOutcome(new Move(Location.from(Row.FOUR, Col.D), Location.from(Row.FOUR, Col.F)));
+            board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.FOUR, Col.D), Location.from(Row.FOUR, Col.F)));
         });
     });
 
@@ -253,13 +253,13 @@ describe("king outcome scenarios", function () {
         board.positions.move(Location.from(Row.SEVEN, Col.C), Location.from(Row.FIVE, Col.D));
 
         assertError("IllegalMoveError", function () {
-            board.calculateOutcome(new Move(Location.from(Row.FOUR, Col.E), Location.from(Row.TWO, Col.C)));
+            board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.FOUR, Col.E), Location.from(Row.TWO, Col.C)));
         });
 
-        board.calculateOutcome(new Move(Location.from(Row.FOUR, Col.E), Location.from(Row.FIVE, Col.D)));
+        board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.FOUR, Col.E), Location.from(Row.FIVE, Col.D)));
 
         assertError("IllegalMoveError", function () {
-            board.calculateOutcome(new Move(Location.from(Row.FIVE, Col.D), Location.from(Row.SEVEN, Col.F)));
+            board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.FIVE, Col.D), Location.from(Row.SEVEN, Col.F)));
         });
     });
 
@@ -271,10 +271,10 @@ describe("king outcome scenarios", function () {
         let initialSize = board.defeatedPieces.length;
 
         assertError("IllegalMoveError", function () {
-            board.calculateOutcome(new Move(Location.from(Row.FOUR, Col.E), Location.from(Row.TWO, Col.C)));
+            board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.FOUR, Col.E), Location.from(Row.TWO, Col.C)));
         });
 
-        let out1 = board.calculateOutcome(new Move(Location.from(Row.FOUR, Col.E), Location.from(Row.FIVE, Col.D)));
+        let out1 = board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.FOUR, Col.E), Location.from(Row.FIVE, Col.D)));
 
         assert.equal(board.defeatedPieces.length, initialSize + 1);
         expect(out1.defeatedPosition.piece instanceof Queen).to.be.true;
@@ -285,41 +285,41 @@ describe("knight outcome scenarios", function () {
     it("knight can be moved in L shapes only, if square not occupied and board allows", function () {
         let board = new Board();
 
-        board.calculateOutcome(new Move(Location.from(Row.ONE, Col.B), Location.from(Row.THREE, Col.C)));
+        board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.ONE, Col.B), Location.from(Row.THREE, Col.C)));
 
         assertError("IllegalMoveError", function () {
-            board.calculateOutcome(new Move(Location.from(Row.THREE, Col.C), Location.from(Row.TWO, Col.E)));
+            board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.THREE, Col.C), Location.from(Row.TWO, Col.E)));
         });
 
         assertError("IllegalMoveError", function () {
-            board.calculateOutcome(new Move(Location.from(Row.THREE, Col.C), Location.from(Row.THREE, Col.B)));
+            board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.THREE, Col.C), Location.from(Row.THREE, Col.B)));
         });
 
         assertError("IllegalMoveError", function () {
-            board.calculateOutcome(new Move(Location.from(Row.THREE, Col.C), Location.from(Row.FOUR, Col.B)));
+            board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.THREE, Col.C), Location.from(Row.FOUR, Col.B)));
         });
 
         assertError("IllegalMoveError", function () {
-            board.calculateOutcome(new Move(Location.from(Row.THREE, Col.C), Location.from(Row.TWO, Col.E)));
+            board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.THREE, Col.C), Location.from(Row.TWO, Col.E)));
         });
 
-        board.calculateOutcome(new Move(Location.from(Row.THREE, Col.C), Location.from(Row.FOUR, Col.A)));
+        board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.THREE, Col.C), Location.from(Row.FOUR, Col.A)));
 
         assertError("IllegalMoveError", function () {
-            board.calculateOutcome(new Move(Location.from(Row.FOUR, Col.A), Location.from(Row.TWO, Col.B)));
+            board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.FOUR, Col.A), Location.from(Row.TWO, Col.B)));
         });
 
-        board.calculateOutcome(new Move(Location.from(Row.FOUR, Col.A), Location.from(Row.SIX, Col.B)));
+        board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.FOUR, Col.A), Location.from(Row.SIX, Col.B)));
     });
 
     it("if enemy piece in its target location, the knight captures it", function () {
         let board = new Board();
         let initialSize = board.defeatedPieces.length;
 
-        board.calculateOutcome(new Move(Location.from(Row.ONE, Col.B), Location.from(Row.THREE, Col.C)));
-        board.calculateOutcome(new Move(Location.from(Row.THREE, Col.C), Location.from(Row.FIVE, Col.B)));
-        let out1 = board.calculateOutcome(new Move(Location.from(Row.FIVE, Col.B), Location.from(Row.SEVEN, Col.C)));
-        let out2 = board.calculateOutcome(new Move(Location.from(Row.SEVEN, Col.C), Location.from(Row.EIGHT, Col.E)));
+        board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.ONE, Col.B), Location.from(Row.THREE, Col.C)));
+        board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.THREE, Col.C), Location.from(Row.FIVE, Col.B)));
+        let out1 = board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.FIVE, Col.B), Location.from(Row.SEVEN, Col.C)));
+        let out2 = board.calculateOutcome(new Player("p1", Color.WHITE), new Move(Location.from(Row.SEVEN, Col.C), Location.from(Row.EIGHT, Col.E)));
 
         assert.equal(board.defeatedPieces.length, initialSize + 2);
         expect(out1.defeatedPosition.piece instanceof Pawn).to.be.true;
@@ -328,16 +328,10 @@ describe("knight outcome scenarios", function () {
 });
 
 describe("check and checkMate", function () {
-    let players = new Array<Player>();
-    players.push(new Player("p1", Color.WHITE))
-    players.push(new Player("p2", Color.BLACK))
-
     it("game stops when king is defeated, outcome is CheckMate", function () {
+        let players = getTwoPlayers();
         let firstPlayer = players[0];
-        let secondPlayer = players[1];
-        let configuredOutcome = new CheckMate();
-        configuredOutcome.defeatedPosition = new Position(Location.from(Row.ONE, Col.B), new King(secondPlayer.color));
-        let game = new ChessMeGame(new Board(new ConfigurableOutcomeEngine(configuredOutcome)), players);
+        let game = new ChessMeGame(new Board(new ConfigurableOutcomeEngine(new CheckMate(firstPlayer))), players);
 
         let outcome = game.move(firstPlayer, new Move(Location.from(Row.ONE, Col.A), Location.from(Row.ONE, Col.B)));
 
