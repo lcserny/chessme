@@ -394,4 +394,34 @@ describe("check scenarios", function () {
         expect(out2.check).to.be.true;
         expect(out2.winningPlayer.name).equals(firstPlayer.name);
     });
+
+    it("complex, white queen check's black king, then black bishop defends", function () {
+        let players = getTwoPlayers();
+        let firstPlayer = players[0];
+        let secondPlayer = players[1];
+        let board = new Board();
+        let game = new ChessMeGame(board, players);
+
+        board.positions.removePosition(board.positions.getPosition(Location.from(Row.TWO, Col.D)));
+
+        let out1 = game.move(firstPlayer, new Move(Location.from(Row.ONE, Col.D), Location.from(Row.FOUR, Col.D)));
+        expect(out1.check).to.be.false;
+        assert.equal(out1.winningPlayer, null);
+
+        game.move(secondPlayer, new Move(Location.from(Row.SEVEN, Col.E), Location.from(Row.SIX, Col.E)));
+
+        let out2 = game.move(firstPlayer, new Move(Location.from(Row.FOUR, Col.D), Location.from(Row.FOUR, Col.E)));
+        expect(out2.check).to.be.false;
+        assert.equal(out2.winningPlayer, null);
+
+        game.move(secondPlayer, new Move(Location.from(Row.SIX, Col.E), Location.from(Row.FIVE, Col.E)));
+
+        let out3 = game.move(firstPlayer, new Move(Location.from(Row.FOUR, Col.E), Location.from(Row.FIVE, Col.E)));
+        expect(out3.check).to.be.true;
+        expect(out3.winningPlayer.name).equals(firstPlayer.name);
+
+        let out4 = game.move(secondPlayer, new Move(Location.from(Row.EIGHT, Col.F), Location.from(Row.SEVEN, Col.E)));
+        expect(out4.check).to.be.false;
+        assert.equal(out4.winningPlayer, null);
+    });
 });
