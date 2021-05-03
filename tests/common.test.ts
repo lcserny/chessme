@@ -14,8 +14,8 @@ export class OutcomeEngineSpy extends SimpleOutcomeEngine{
         return super.calculateOutcome(player, move, positions);
     }
 
-    parseCheck(player: Player, move: Move, positions: Positions, outcome: Outcome): Outcome {
-        return super.parseCheck(player, move, positions, outcome);
+    parseCheck(playerColor: Color, positions: Positions, outcome: Outcome): Outcome {
+        return super.parseCheck(playerColor, positions, outcome);
     }
 }
 

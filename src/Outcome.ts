@@ -53,23 +53,3 @@ export class Outcome {
         this._checkMate = value;
     }
 }
-
-export class Check extends Outcome {
-
-    constructor(winningPlayer: Color, defeatedPos: Position) {
-        super();
-        this.defeatedPosition = defeatedPos;
-        this.winningPlayer = winningPlayer;
-        this.check = true;
-    }
-}
-
-export class CheckMate extends Outcome {
-
-    constructor(winner: Color, defeatedPos: Position) {
-        super();
-        this.defeatedPosition = defeatedPos;
-        this.winner = winner;
-        this.checkMate = true;
-    }
-}

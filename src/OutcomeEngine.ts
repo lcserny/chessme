@@ -1,6 +1,6 @@
 import {Location, Position, Positions} from "./Position";
 import {Move} from "./Move";
-import {Check, CheckMate, Outcome} from "./Outcome";
+import {Outcome} from "./Outcome";
 import {Piece} from "./Piece";
 import {IllegalMoveError} from "./errors";
 import {King} from "./King";
@@ -8,7 +8,7 @@ import {Color, Player, reverseColor} from "./Player";
 
 export interface OutcomeEngine {
     calculateOutcome(player: Player, move: Move, positions: Positions): Outcome;
-    parseCheck(player: Player, move: Move, positions: Positions, outcome: Outcome): Outcome;
+    parseCheck(playerColor: Color, positions: Positions, outcome: Outcome): Outcome;
 }
 
 export class SimpleOutcomeEngine implements OutcomeEngine {
@@ -31,29 +31,35 @@ export class SimpleOutcomeEngine implements OutcomeEngine {
 
     private parseCheckMate(defeatedPiece: Piece, outcome: Outcome, playerColor: Color): Outcome {
         if (defeatedPiece instanceof King) {
-            return new CheckMate(playerColor, outcome.defeatedPosition);
+            outcome.checkMate = true;
+            outcome.winner = playerColor;
         }
         return outcome;
     }
 
-    parseCheck(player: Player, move: Move, positions: Positions, outcome: Outcome): Outcome {
-        let enemyKingPosition = positions.findPositionOf(King, reverseColor(player.color));
+    // TODO: refactor this as it does the same thing twice, but reversed
+    parseCheck(playerColor: Color, positions: Positions, outcome: Outcome): Outcome {
+        let enemyKingPosition = positions.findPositionOf(King, reverseColor(playerColor));
         if (enemyKingPosition != null) {
-            for (let position of positions.findAllPositionOf(player.color)) {
+            for (let position of positions.findAllPositionOf(playerColor)) {
                 for (let availableMove of position.piece.availableMoves(position.location, positions)) {
                     if (availableMove.row == enemyKingPosition.location.row && availableMove.col == enemyKingPosition.location.col) {
-                        return new Check(player.color, outcome.defeatedPosition);
+                        outcome.check = true;
+                        outcome.winningPlayer = playerColor;
+                        return outcome;
                     }
                 }
             }
         }
 
-        let playerKingPosition = positions.findPositionOf(King, player.color);
+        let playerKingPosition = positions.findPositionOf(King, playerColor);
         if (playerKingPosition != null) {
-            for (let position of positions.findAllPositionOf(reverseColor(player.color))) {
+            for (let position of positions.findAllPositionOf(reverseColor(playerColor))) {
                 for (let availableMove of position.piece.availableMoves(position.location, positions)) {
                     if (availableMove.row == playerKingPosition.location.row && availableMove.col == playerKingPosition.location.col) {
-                        return new Check(reverseColor(player.color), outcome.defeatedPosition);
+                        outcome.check = true;
+                        outcome.winningPlayer = reverseColor(playerColor);
+                        return outcome;
                     }
                 }
             }
