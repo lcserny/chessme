@@ -3,14 +3,13 @@ import {describe, it} from "mocha";
 import {Board} from "../src/Board";
 import {Move} from "../src/Move";
 import {Col, Location, Row} from "../src/Position";
-import {assertError, ConfigurableOutcomeEngine, getTwoPlayers} from "./common.test";
+import {assertError, getTwoPlayers} from "./common.test";
 import {Pawn} from "../src/Pawn";
 import {Knight} from "../src/Knight";
 import {Bishop} from "../src/Bishop";
 import {Rook} from "../src/Rook";
 import {Queen} from "../src/Queen";
 import {King} from "../src/King";
-import {CheckMate} from "../src/Outcome";
 import {ChessMeGame} from "../src/ChessMeGame";
 import {Color, Player} from "../src/Player";
 
@@ -327,21 +326,72 @@ describe("knight outcome scenarios", function () {
     });
 });
 
-describe("check and checkMate", function () {
-    it("game stops when king is defeated, outcome is CheckMate", function () {
+describe("check scenarios", function () {
+    it("simple, white queen check's black king", function () {
         let players = getTwoPlayers();
         let firstPlayer = players[0];
-        let game = new ChessMeGame(new Board(new ConfigurableOutcomeEngine(new CheckMate(firstPlayer))), players);
+        let secondPlayer = players[1];
+        let board = new Board();
+        let game = new ChessMeGame(board, players);
 
-        let outcome = game.move(firstPlayer, new Move(Location.from(Row.ONE, Col.A), Location.from(Row.ONE, Col.B)));
+        board.positions.removePosition(board.positions.getPosition(Location.from(Row.TWO, Col.D)));
 
-        expect(game.status.valueOf()).contains("stop");
-        expect(outcome instanceof CheckMate).to.be.true;
-        expect(outcome.winner.name).equals(firstPlayer.name);
+        let out1 = game.move(firstPlayer, new Move(Location.from(Row.ONE, Col.D), Location.from(Row.FOUR, Col.D)));
+        expect(out1.check).to.be.false;
+        assert.equal(out1.winningPlayer, null);
+
+        game.move(secondPlayer, new Move(Location.from(Row.SEVEN, Col.E), Location.from(Row.SIX, Col.E)));
+
+        let out2 = game.move(firstPlayer, new Move(Location.from(Row.FOUR, Col.D), Location.from(Row.FOUR, Col.E)));
+        expect(out2.check).to.be.false;
+        assert.equal(out2.winningPlayer, null);
+
+        game.move(secondPlayer, new Move(Location.from(Row.SIX, Col.E), Location.from(Row.FIVE, Col.E)));
+
+        let out3 = game.move(firstPlayer, new Move(Location.from(Row.FOUR, Col.E), Location.from(Row.FIVE, Col.E)));
+        expect(out3.check).to.be.true;
+        expect(out3.winningPlayer.name).equals(firstPlayer.name);
     });
 
-    // TODO: how to know when king is in danger?
-    it("when king is in danger, outcome is Check", function () {
-        throw new Error("Not implemented");
+    it("simple, white knight check's black king", function () {
+        let players = getTwoPlayers();
+        let firstPlayer = players[0];
+        let secondPlayer = players[1];
+        let board = new Board();
+        let game = new ChessMeGame(board, players);
+
+        let out1 = game.move(firstPlayer, new Move(Location.from(Row.ONE, Col.B), Location.from(Row.THREE, Col.C)));
+        expect(out1.check).to.be.false;
+        assert.equal(out1.winningPlayer, null);
+
+        game.move(secondPlayer, new Move(Location.from(Row.SEVEN, Col.E), Location.from(Row.SIX, Col.E)));
+
+        let out2 = game.move(firstPlayer, new Move(Location.from(Row.THREE, Col.C), Location.from(Row.FIVE, Col.B)));
+        expect(out2.check).to.be.false;
+        assert.equal(out2.winningPlayer, null);
+
+        game.move(secondPlayer, new Move(Location.from(Row.SIX, Col.E), Location.from(Row.FIVE, Col.E)));
+
+        let out3 = game.move(firstPlayer, new Move(Location.from(Row.FIVE, Col.B), Location.from(Row.SIX, Col.D)));
+        expect(out3.check).to.be.true;
+        expect(out3.winningPlayer.name).equals(firstPlayer.name);
+    });
+
+    it("simple, white bishop check's black king", function () {
+        let players = getTwoPlayers();
+        let firstPlayer = players[0];
+        let secondPlayer = players[1];
+        let board = new Board();
+        let game = new ChessMeGame(board, players);
+
+        board.positions.removePosition(board.positions.getPosition(Location.from(Row.TWO, Col.E)));
+
+        let out1 = game.move(firstPlayer, new Move(Location.from(Row.ONE, Col.F), Location.from(Row.FIVE, Col.B)));
+        expect(out1.check).to.be.false;
+        assert.equal(out1.winningPlayer, null);
+
+        let out2 = game.move(secondPlayer, new Move(Location.from(Row.SEVEN, Col.D), Location.from(Row.SIX, Col.D)));
+        expect(out2.check).to.be.true;
+        expect(out2.winningPlayer.name).equals(firstPlayer.name);
     });
 });

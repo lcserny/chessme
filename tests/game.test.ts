@@ -6,7 +6,7 @@ import {Board} from "../src/Board";
 import {Move} from "../src/Move";
 import {Col, Location, Row} from "../src/Position";
 import {GameStatusError} from "../src/errors";
-import {assertError, ConfigurableOutcomeEngine, getTwoPlayers} from "./common.test";
+import {assertError, getTwoPlayers} from "./common.test";
 
 describe("game statuses", function () {
     let board = new Board();
@@ -78,37 +78,49 @@ describe("game players", function () {
     });
 
     it("game executes move for player", function () {
-        let player1 = new Player("a", Color.WHITE);
-        let player2 = new Player("b", Color.BLACK);
-        let game = new ChessMeGame(new Board(new ConfigurableOutcomeEngine()), new Array<Player>(player2, player1));
-        let move = new Move(Location.from(Row.ONE, Col.A), Location.from(Row.TWO, Col.A));
+        let players = getTwoPlayers();
+        let game = new ChessMeGame(new Board(), players);
+        let move = new Move(Location.from(Row.TWO, Col.A), Location.from(Row.THREE, Col.A));
 
-        let outcome = game.move(player1, move);
+        let outcome = game.move(players[0], move);
 
         assert.notEqual(outcome, null);
     });
 
     it("game allows white player to start first move", function () {
-        let player1 = new Player("a", Color.WHITE);
-        let player2 = new Player("b", Color.BLACK);
-        let game = new ChessMeGame(new Board(), new Array<Player>(player1, player2));
+        let players = getTwoPlayers();
+        let game = new ChessMeGame(new Board(), players);
         let move = new Move(Location.from(Row.ONE, Col.A), Location.from(Row.TWO, Col.A));
 
         assertError("PlayerTurnError", function () {
-            game.move(player2, move);
+            game.move(players[1], move);
         });
     });
 
     it("game switches player turn allowed after move", function () {
-        let player1 = new Player("a", Color.WHITE);
-        let player2 = new Player("b", Color.BLACK);
-        let game = new ChessMeGame(new Board(new ConfigurableOutcomeEngine()), new Array<Player>(player1, player2));
-        let move = new Move(Location.from(Row.ONE, Col.A), Location.from(Row.TWO, Col.A));
+        let players = getTwoPlayers();
+        let game = new ChessMeGame(new Board(), players);
+        let move = new Move(Location.from(Row.TWO, Col.A), Location.from(Row.THREE, Col.A));
 
-        game.move(player1, move);
+        game.move(players[0], move);
 
         assertError("PlayerTurnError", function () {
-            game.move(player1, move);
+            game.move(players[0], move);
         });
+    });
+
+    it("game stops when king is defeated, outcome is CheckMate", function () {
+        let players = getTwoPlayers();
+        let firstPlayer = players[0];
+        let board = new Board();
+        let game = new ChessMeGame(board, players);
+
+        board.positions.move(Location.from(Row.ONE, Col.B), Location.from(Row.SIX, Col.D));
+
+        let outcome = game.move(firstPlayer, new Move(Location.from(Row.SIX, Col.D), Location.from(Row.EIGHT, Col.E)));
+
+        expect(game.status.valueOf()).contains("stop");
+        expect(outcome.checkMate).to.be.true;
+        expect(outcome.winner.name).equals(firstPlayer.name);
     });
 });

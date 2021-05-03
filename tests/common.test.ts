@@ -1,5 +1,5 @@
 import {assert} from "chai";
-import {OutcomeEngine, SimpleOutcomeEngine} from "../src/OutcomeEngine";
+import {SimpleOutcomeEngine} from "../src/OutcomeEngine";
 import {Positions} from "../src/Position";
 import {Move} from "../src/Move";
 import {Outcome} from "../src/Outcome";
@@ -12,19 +12,6 @@ export class OutcomeEngineSpy extends SimpleOutcomeEngine{
     calculateOutcome(player: Player, move: Move, positions: Positions): Outcome {
         this.calculateOutcomeCalled++;
         return super.calculateOutcome(player, move, positions);
-    }
-}
-
-export class ConfigurableOutcomeEngine implements OutcomeEngine {
-
-    private readonly _outcome: Outcome;
-
-    constructor(outcome?: Outcome) {
-        this._outcome = outcome == null ? new Outcome() : outcome;
-    }
-
-    calculateOutcome(player: Player, move: Move, positions: Positions): Outcome {
-        return this._outcome;
     }
 }
 
