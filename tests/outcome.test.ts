@@ -350,7 +350,7 @@ describe("check scenarios", function () {
 
         let out3 = game.move(firstPlayer, new Move(Location.from(Row.FOUR, Col.E), Location.from(Row.FIVE, Col.E)));
         expect(out3.check).to.be.true;
-        expect(out3.winningPlayer.name).equals(firstPlayer.name);
+        expect(out3.winningPlayer).equals(firstPlayer.color);
     });
 
     it("simple, white knight check's black king", function () {
@@ -374,7 +374,7 @@ describe("check scenarios", function () {
 
         let out3 = game.move(firstPlayer, new Move(Location.from(Row.FIVE, Col.B), Location.from(Row.SIX, Col.D)));
         expect(out3.check).to.be.true;
-        expect(out3.winningPlayer.name).equals(firstPlayer.name);
+        expect(out3.winningPlayer).equals(firstPlayer.color);
     });
 
     it("simple, white bishop check's black king", function () {
@@ -392,7 +392,7 @@ describe("check scenarios", function () {
 
         let out2 = game.move(secondPlayer, new Move(Location.from(Row.SEVEN, Col.D), Location.from(Row.SIX, Col.D)));
         expect(out2.check).to.be.true;
-        expect(out2.winningPlayer.name).equals(firstPlayer.name);
+        expect(out2.winningPlayer).equals(firstPlayer.color);
     });
 
     it("complex, white queen check's black king, then black bishop defends", function () {
@@ -418,7 +418,7 @@ describe("check scenarios", function () {
 
         let out3 = game.move(firstPlayer, new Move(Location.from(Row.FOUR, Col.E), Location.from(Row.FIVE, Col.E)));
         expect(out3.check).to.be.true;
-        expect(out3.winningPlayer.name).equals(firstPlayer.name);
+        expect(out3.winningPlayer).equals(firstPlayer.color);
 
         let out4 = game.move(secondPlayer, new Move(Location.from(Row.EIGHT, Col.F), Location.from(Row.SEVEN, Col.E)));
         expect(out4.check).to.be.false;

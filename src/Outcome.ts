@@ -1,27 +1,27 @@
 import {Position} from "./Position";
-import {Player} from "./Player";
+import {Color} from "./Player";
 
 export class Outcome {
 
-    private _winner: Player;
-    private _winningPlayer: Player;
+    private _winner: Color;
+    private _winningPlayer: Color;
     private _defeatedPosition: Position;
     private _check: boolean = false;
     private _checkMate: boolean = false;
 
-    get winner(): Player {
+    get winner(): Color {
         return this._winner;
     }
 
-    set winner(value: Player) {
+    set winner(value: Color) {
         this._winner = value;
     }
 
-    get winningPlayer(): Player {
+    get winningPlayer(): Color {
         return this._winningPlayer;
     }
 
-    set winningPlayer(value: Player) {
+    set winningPlayer(value: Color) {
         this._winningPlayer = value;
     }
 
@@ -56,7 +56,7 @@ export class Outcome {
 
 export class Check extends Outcome {
 
-    constructor(winningPlayer: Player) {
+    constructor(winningPlayer: Color) {
         super();
         this.winningPlayer = winningPlayer;
         this.check = true;
@@ -65,7 +65,7 @@ export class Check extends Outcome {
 
 export class CheckMate extends Outcome {
 
-    constructor(winner: Player) {
+    constructor(winner: Color) {
         super();
         this.winner = winner;
         this.checkMate = true;

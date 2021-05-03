@@ -28,6 +28,7 @@ export class Board {
     calculateOutcome(player: Player, move: Move): Outcome {
         let outcome = this._outcomeEngine.calculateOutcome(player, move, this.positions);
         this.updateBoard(move, outcome);
+        player.addMove(move);
         return outcome;
     }
 

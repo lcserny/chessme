@@ -121,6 +121,6 @@ describe("game players", function () {
 
         expect(game.status.valueOf()).contains("stop");
         expect(outcome.checkMate).to.be.true;
-        expect(outcome.winner.name).equals(firstPlayer.name);
+        expect(outcome.winner).equals(firstPlayer.color);
     });
 });

@@ -178,6 +178,16 @@ export class Positions {
         throw new PieceNotFoundError("Could not find piece");
     }
 
+    findAllPositionOf(color: Color): Array<Position> {
+        let results = new Array<Position>();
+        for (let position of this._positions) {
+            if (position.hasPiece()&& position.piece.playerColor == color) {
+                results.push(position);
+            }
+        }
+        return results;
+    }
+
     addPosition(position: Position) {
         if (this.getPosition(position.location) == null) {
             this._positions.push(position);
