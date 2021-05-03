@@ -424,4 +424,26 @@ describe("check scenarios", function () {
         expect(out4.check).to.be.false;
         assert.equal(out4.winningPlayer, null);
     });
+
+    it("complex, white pawn moves exposing white king for black check", function () {
+        let players = getTwoPlayers();
+        let firstPlayer = players[0];
+        let secondPlayer = players[1];
+        let board = new Board();
+        let game = new ChessMeGame(board, players);
+
+        board.positions.removePosition(board.positions.getPosition(Location.from(Row.SEVEN, Col.C)));
+
+        let out1 = game.move(firstPlayer, new Move(Location.from(Row.TWO, Col.E), Location.from(Row.THREE, Col.E)));
+        expect(out1.check).to.be.false;
+        assert.equal(out1.winningPlayer, null);
+
+        let out2 = game.move(secondPlayer, new Move(Location.from(Row.EIGHT, Col.D), Location.from(Row.FIVE, Col.A)));
+        expect(out2.check).to.be.false;
+        assert.equal(out2.winningPlayer, null);
+
+        let out3 = game.move(firstPlayer, new Move(Location.from(Row.TWO, Col.D), Location.from(Row.THREE, Col.D)));
+        expect(out3.check).to.be.true;
+        assert.equal(out3.winningPlayer, secondPlayer.color);
+    });
 });
