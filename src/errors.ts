@@ -53,10 +53,3 @@ export class IllegalMoveError extends Error {
         this.name = "IllegalMoveError";
     }
 }
-
-export class PieceNotFoundError extends Error {
-    constructor(message: string) {
-        super(message);
-        this.name = "PieceNotFoundError";
-    }
-}

@@ -1,4 +1,4 @@
-import {Position} from "./Position";
+import {Position, Positions} from "./Position";
 import {Color} from "./Player";
 
 export class Outcome {
@@ -56,8 +56,9 @@ export class Outcome {
 
 export class Check extends Outcome {
 
-    constructor(winningPlayer: Color) {
+    constructor(winningPlayer: Color, defeatedPos: Position) {
         super();
+        this.defeatedPosition = defeatedPos;
         this.winningPlayer = winningPlayer;
         this.check = true;
     }
@@ -65,8 +66,9 @@ export class Check extends Outcome {
 
 export class CheckMate extends Outcome {
 
-    constructor(winner: Color) {
+    constructor(winner: Color, defeatedPos: Position) {
         super();
+        this.defeatedPosition = defeatedPos;
         this.winner = winner;
         this.checkMate = true;
     }

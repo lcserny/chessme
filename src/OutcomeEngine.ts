@@ -8,6 +8,7 @@ import {Color, Player, reverseColor} from "./Player";
 
 export interface OutcomeEngine {
     calculateOutcome(player: Player, move: Move, positions: Positions): Outcome;
+    parseCheck(player: Player, move: Move, positions: Positions, outcome: Outcome): Outcome;
 }
 
 export class SimpleOutcomeEngine implements OutcomeEngine {
@@ -15,7 +16,6 @@ export class SimpleOutcomeEngine implements OutcomeEngine {
     calculateOutcome(player: Player, move: Move, positions: Positions): Outcome {
         if (this.isMoveAllowed(positions, move)) {
             let outcome = new Outcome();
-            outcome = this.parseCheck(player.color, move, positions, outcome);
 
             let sourcePosition = positions.getPosition(move.source);
             let targetPosition = positions.getPosition(move.target);
@@ -31,39 +31,31 @@ export class SimpleOutcomeEngine implements OutcomeEngine {
 
     private parseCheckMate(defeatedPiece: Piece, outcome: Outcome, playerColor: Color): Outcome {
         if (defeatedPiece instanceof King) {
-            return new CheckMate(playerColor);
+            return new CheckMate(playerColor, outcome.defeatedPosition);
         }
         return outcome;
     }
 
-    // TODO: when player moves, player might be checked instead of enemy
-    private parseCheck(playerColor: Color, move: Move, positions: Positions, outcome: Outcome): Outcome {
-        /*let enemyKingPosition = positions.findPositionOf(King, reverseColor(playerColor));
-        let playerPositions = positions.findAllPositionOf(playerColor);
-        playerPositions.push(new Position(move.target, positions.getPosition(move.source).piece));
-        for (let position of playerPositions) {
-            for (let availableMove of position.piece.availableMoves(position.location, positions)) {
-                if (availableMove.row == enemyKingPosition.location.row && availableMove.col == enemyKingPosition.location.col) {
-                    return new Check(playerColor);
+    parseCheck(player: Player, move: Move, positions: Positions, outcome: Outcome): Outcome {
+        let enemyKingPosition = positions.findPositionOf(King, reverseColor(player.color));
+        if (enemyKingPosition != null) {
+            for (let position of positions.findAllPositionOf(player.color)) {
+                for (let availableMove of position.piece.availableMoves(position.location, positions)) {
+                    if (availableMove.row == enemyKingPosition.location.row && availableMove.col == enemyKingPosition.location.col) {
+                        return new Check(player.color, outcome.defeatedPosition);
+                    }
                 }
             }
         }
 
-        let playerKingPosition = positions.findPositionOf(King, playerColor);
-        let enemyPositions = positions.findAllPositionOf(reverseColor(playerColor));
-        for (let position of enemyPositions) {
-            for (let availableMove of position.piece.availableMoves(position.location, positions)) {
-                if (availableMove.row == playerKingPosition.location.row && availableMove.col == playerKingPosition.location.col) {
-                    return new Check(reverseColor(playerColor));
+        let playerKingPosition = positions.findPositionOf(King, player.color);
+        if (playerKingPosition != null) {
+            for (let position of positions.findAllPositionOf(reverseColor(player.color))) {
+                for (let availableMove of position.piece.availableMoves(position.location, positions)) {
+                    if (availableMove.row == playerKingPosition.location.row && availableMove.col == playerKingPosition.location.col) {
+                        return new Check(reverseColor(player.color), outcome.defeatedPosition);
+                    }
                 }
-            }
-        }*/
-
-        let enemyKingPosition = positions.findPositionOf(King, reverseColor(playerColor));
-        let availableMoves = positions.getPosition(move.source).piece.availableMoves(move.target, positions);
-        for (let availableMove of availableMoves) {
-            if (availableMove.row == enemyKingPosition.location.row && availableMove.col == enemyKingPosition.location.col) {
-                return new Check(playerColor);
             }
         }
 

@@ -13,6 +13,10 @@ export class OutcomeEngineSpy extends SimpleOutcomeEngine{
         this.calculateOutcomeCalled++;
         return super.calculateOutcome(player, move, positions);
     }
+
+    parseCheck(player: Player, move: Move, positions: Positions, outcome: Outcome): Outcome {
+        return super.parseCheck(player, move, positions, outcome);
+    }
 }
 
 export function getTwoPlayers(): Array<Player> {
