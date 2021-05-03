@@ -22,8 +22,7 @@ export class SimpleOutcomeEngine implements OutcomeEngine {
             let targetPosition = positions.getPosition(target);
 
             if (targetPosition != null && targetPosition.hasPiece() && targetPosition.piece.playerColor != sourcePosition.piece.playerColor) {
-                outcome = this.parseCheckMate(targetPosition.piece, outcome, player);
-                outcome = this.parseCheck(targetPosition.piece, outcome, player, move, positions);
+                outcome = this.parseCheckStates(targetPosition.piece, outcome, player, move, positions);
                 outcome.defeatedPosition = targetPosition;
             }
 
@@ -33,18 +32,16 @@ export class SimpleOutcomeEngine implements OutcomeEngine {
         throw new IllegalMoveError("Move not allowed");
     }
 
-    private parseCheck(defeatedPiece: Piece, outcome: Outcome, player: Player, move: Move, positions: Positions): Outcome {
+    private parseCheckStates(defeatedPiece: Piece, outcome: Outcome, player: Player, move: Move, positions: Positions): Outcome {
+        if (defeatedPiece instanceof King) {
+            return  new CheckMate(player);
+        }
+
         // TODO: all info is here to determine if Check, but calculation is complex...
         // if (check state) {
         //     outcome = new Check(player);
         // }
-        return outcome;
-    }
 
-    private parseCheckMate(defeatedPiece: Piece, outcome: Outcome, player: Player): Outcome {
-        if (defeatedPiece instanceof King) {
-            outcome = new CheckMate(player);
-        }
         return outcome;
     }
 
