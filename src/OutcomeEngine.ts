@@ -37,34 +37,25 @@ export class SimpleOutcomeEngine implements OutcomeEngine {
         return outcome;
     }
 
-    // TODO: refactor this as it does the same thing twice, but reversed
     parseCheck(playerColor: Color, positions: Positions, outcome: Outcome): Outcome {
-        let enemyKingPosition = positions.findPositionOf(King, reverseColor(playerColor));
+        outcome = this.parseCheckInternal(playerColor, positions, outcome);
+        outcome = this.parseCheckInternal(reverseColor(playerColor), positions, outcome);
+        return outcome;
+    }
+
+    private parseCheckInternal(color: Color, positions: Positions, outcome: Outcome): Outcome {
+        let enemyKingPosition = positions.findPositionOf(King, reverseColor(color));
         if (enemyKingPosition != null) {
-            for (let position of positions.findAllPositionOf(playerColor)) {
+            for (let position of positions.findAllPositionOf(color)) {
                 for (let availableMove of position.piece.availableMoves(position.location, positions)) {
                     if (availableMove.row == enemyKingPosition.location.row && availableMove.col == enemyKingPosition.location.col) {
                         outcome.check = true;
-                        outcome.winningPlayer = playerColor;
+                        outcome.winningPlayer = color;
                         return outcome;
                     }
                 }
             }
         }
-
-        let playerKingPosition = positions.findPositionOf(King, playerColor);
-        if (playerKingPosition != null) {
-            for (let position of positions.findAllPositionOf(reverseColor(playerColor))) {
-                for (let availableMove of position.piece.availableMoves(position.location, positions)) {
-                    if (availableMove.row == playerKingPosition.location.row && availableMove.col == playerKingPosition.location.col) {
-                        outcome.check = true;
-                        outcome.winningPlayer = reverseColor(playerColor);
-                        return outcome;
-                    }
-                }
-            }
-        }
-
         return outcome;
     }
 
