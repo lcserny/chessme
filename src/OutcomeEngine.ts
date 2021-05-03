@@ -22,15 +22,8 @@ export class SimpleOutcomeEngine implements OutcomeEngine {
             let targetPosition = positions.getPosition(target);
 
             if (targetPosition != null && targetPosition.hasPiece() && targetPosition.piece.playerColor != sourcePosition.piece.playerColor) {
-                if (targetPosition.piece instanceof King) {
-                    outcome = new CheckMate(player);
-                }
-
-                // TODO: all info is here to determine if Check, but calculation is complex...
-                // if (outcome instanceof Check) {
-                //     outcome.winningPlayer = player;
-                // }
-
+                outcome = this.parseCheckMate(targetPosition.piece, outcome, player);
+                outcome = this.parseCheck(targetPosition.piece, outcome, player, move, positions);
                 outcome.defeatedPosition = targetPosition;
             }
 
@@ -38,6 +31,21 @@ export class SimpleOutcomeEngine implements OutcomeEngine {
             return outcome;
         }
         throw new IllegalMoveError("Move not allowed");
+    }
+
+    private parseCheck(defeatedPiece: Piece, outcome: Outcome, player: Player, move: Move, positions: Positions): Outcome {
+        // TODO: all info is here to determine if Check, but calculation is complex...
+        // if (check state) {
+        //     outcome = new Check(player);
+        // }
+        return outcome;
+    }
+
+    private parseCheckMate(defeatedPiece: Piece, outcome: Outcome, player: Player): Outcome {
+        if (defeatedPiece instanceof King) {
+            outcome = new CheckMate(player);
+        }
+        return outcome;
     }
 
     private isMoveAllowed(positions: Positions, move: Move): boolean {
