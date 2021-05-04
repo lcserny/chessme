@@ -6,6 +6,7 @@ export type LocationMove = (x: Location) => Location;
 export abstract class Piece {
 
     private readonly _playerColor: Color;
+    protected abstract readonly _name: string;
 
     constructor(playerColor: Color) {
         this._playerColor = playerColor;
@@ -13,6 +14,10 @@ export abstract class Piece {
 
     get playerColor(): Color {
         return this._playerColor;
+    }
+
+    get name(): string {
+        return this._name;
     }
 
     availableMoves(currentLocation: Location, positions: Positions): Array<Location> {

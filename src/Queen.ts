@@ -3,6 +3,8 @@ import {Location, Positions} from "./Position";
 
 export class Queen extends Piece {
 
+    protected readonly _name: string = "Queen";
+
     protected availableMovesBlack(currentLocation: Location, positions: Positions): Array<Location> {
         return this.availableMovesInternal(currentLocation, positions);
     }

@@ -3,6 +3,8 @@ import {Location, Positions, Row} from "./Position";
 
 export class Pawn extends Piece {
 
+    protected readonly _name: string = "Pawn";
+
     availableMovesBlack(currentLocation: Location, positions: Positions): Array<Location> {
         return this.availableMovesInternal(currentLocation, positions, x => x.down(), Row.SEVEN);
     }
