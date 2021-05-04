@@ -4,7 +4,7 @@
   "description": "Chess game, my version",
   "main": "./dist/main.js",
   "scripts": {
-    "test": "env TS_NODE_PROJECT=\"tsconfig.testing.json\" mocha -r esm -r ts-node/register 'tests/**/*.test.ts'",
+    "test": "mocha -r esm -r ts-node/register 'tests/**/*.test.ts'",
     "coverage": "nyc -r lcov -e .ts -x \"*.test.ts\" npm run test",
     "build": "webpack --mode=production",
     "build:dev": "webpack --mode=development",
