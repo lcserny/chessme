@@ -16,8 +16,8 @@ game.move(p1, new Move(Location.from(Row.ONE, Col.D), Location.from(Row.THREE, C
 
 let outcome1 = game.move(p2, new Move(Location.from(Row.SIX, Col.C), Location.from(Row.FOUR, Col.D)));
 let p2CapturedPiece = outcome1.defeatedPosition.piece;
-console.log(p2.name + " captured " + p2CapturedPiece.name + " " + p2CapturedPiece.playerColor);
+console.log(p2.name + " captured " + p2CapturedPiece.name + " " + p2CapturedPiece.color);
 
 let outcome2 = game.move(p1, new Move(Location.from(Row.THREE, Col.D), Location.from(Row.FOUR, Col.D)));
 let p1CapturedPiece = outcome2.defeatedPosition.piece;
-console.log(p1.name + " captured " + p1CapturedPiece.name + " " + p1CapturedPiece.playerColor);
+console.log(p1.name + " captured " + p1CapturedPiece.name + " " + p1CapturedPiece.color);

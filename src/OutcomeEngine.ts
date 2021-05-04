@@ -19,7 +19,7 @@ export class SimpleOutcomeEngine implements OutcomeEngine {
 
             let sourcePosition = positions.getPosition(move.source);
             let targetPosition = positions.getPosition(move.target);
-            if (targetPosition != null && targetPosition.hasPiece() && targetPosition.piece.playerColor != sourcePosition.piece.playerColor) {
+            if (targetPosition != null && targetPosition.hasPiece() && targetPosition.piece.color != sourcePosition.piece.color) {
                 outcome = this.parseCheckMate(targetPosition.piece, outcome, player.color);
                 outcome.defeatedPosition = targetPosition;
             }

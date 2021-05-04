@@ -170,7 +170,7 @@ export class Positions {
 
     findPositionOf(pieceClass: typeof Piece, color: Color): Position | null {
         for (let position of this._positions) {
-            if (position.hasPiece() && position.piece instanceof pieceClass && position.piece.playerColor == color) {
+            if (position.hasPiece() && position.piece instanceof pieceClass && position.piece.color == color) {
                 return position;
             }
         }
@@ -180,7 +180,7 @@ export class Positions {
     findAllPositionOf(color: Color): Array<Position> {
         let results = new Array<Position>();
         for (let position of this._positions) {
-            if (position.hasPiece()&& position.piece.playerColor == color) {
+            if (position.hasPiece()&& position.piece.color == color) {
                 results.push(position);
             }
         }

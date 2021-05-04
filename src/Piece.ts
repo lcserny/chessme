@@ -5,15 +5,15 @@ export type LocationMove = (x: Location) => Location;
 
 export abstract class Piece {
 
-    private readonly _playerColor: Color;
+    private readonly _color: Color;
     protected abstract readonly _name: string;
 
     constructor(playerColor: Color) {
-        this._playerColor = playerColor;
+        this._color = playerColor;
     }
 
-    get playerColor(): Color {
-        return this._playerColor;
+    get color(): Color {
+        return this._color;
     }
 
     get name(): string {
@@ -21,7 +21,7 @@ export abstract class Piece {
     }
 
     availableMoves(currentLocation: Location, positions: Positions): Array<Location> {
-        if (this._playerColor == Color.WHITE) {
+        if (this._color == Color.WHITE) {
             return this.availableMovesWhite(currentLocation, positions);
         }
         return this.availableMovesBlack(currentLocation, positions);
@@ -46,7 +46,7 @@ export abstract class Piece {
             let pos = positions.getPosition(advanced);
             if (pos != null) {
                 tryDirection = false;
-                if (pos.hasPiece() && pos.piece.playerColor != this.playerColor) {
+                if (pos.hasPiece() && pos.piece.color != this.color) {
                     results.push(advanced);
                 }
             } else {
