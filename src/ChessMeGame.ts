@@ -58,7 +58,11 @@ export class ChessMeGame {
         if (outcome.checkMate) {
             this.stop();
         }
+
+        player.addMove(move);
         this.switchPlayerToMove(player);
+
+        // TODO: outcome should be pushed to all players instead of returned here
         return outcome;
     }
 

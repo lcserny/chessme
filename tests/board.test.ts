@@ -14,6 +14,7 @@ import {Piece} from "../src/Piece";
 import {Move} from "../src/Move";
 import {Outcome} from "../src/Outcome";
 import {getTwoPlayers, OutcomeEngineSpy} from "./common.test";
+import {ChessMeGame} from "../src/ChessMeGame";
 
 describe("board setup", function () {
     it("new boards initialize positions", function () {
@@ -127,5 +128,16 @@ describe("board setup", function () {
 
         assert.equal(board.positions.getPosition(source), null);
         expect(board.positions.getPosition(target).piece).equals(sourcePiece);
+    });
+
+    it("move outcome contains updated board positions", function () {
+        let players = getTwoPlayers();
+        let game = new ChessMeGame(new Board(), players);
+
+        let outcome = game.move(players[0], new Move(Location.from(Row.TWO, Col.E), Location.from(Row.FOUR, Col.E)));
+
+        assert.isNotNull(outcome.positions);
+        expect(outcome.positions.length()).equals(32);
+        expect(outcome.positions.getPosition(Location.from(Row.FOUR, Col.E)).piece.name).equals("Pawn");
     });
 });

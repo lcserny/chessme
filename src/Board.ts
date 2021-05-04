@@ -27,17 +27,17 @@ export class Board {
 
     calculateOutcome(player: Player, move: Move): Outcome {
         let outcome = this._outcomeEngine.calculateOutcome(player, move, this.positions);
-        this.updateBoard(move, outcome);
-        outcome = this._outcomeEngine.parseCheck(player.color, this.positions, outcome);
-        player.addMove(move);
+        this.updatePositions(move, outcome);
+        this._outcomeEngine.updateCheckStates(player, outcome);
         return outcome;
     }
 
-    private updateBoard(move: Move, outcome: Outcome): void {
+    private updatePositions(move: Move, outcome: Outcome): void {
         if (outcome.hasDefeatedPosition()) {
             this.defeatedPieces.push(outcome.defeatedPosition.piece);
             this.positions.removePosition(outcome.defeatedPosition);
         }
         this.positions.move(move.source, move.target);
+        outcome.positions = this.positions;
     }
 }

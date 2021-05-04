@@ -8,6 +8,7 @@ export class Outcome {
     private _defeatedPosition: Position;
     private _check: boolean = false;
     private _checkMate: boolean = false;
+    private _positions: Positions;
 
     get winner(): Color {
         return this._winner;
@@ -51,5 +52,13 @@ export class Outcome {
 
     set checkMate(value: boolean) {
         this._checkMate = value;
+    }
+
+    get positions(): Positions {
+        return this._positions;
+    }
+
+    set positions(value: Positions) {
+        this._positions = value;
     }
 }
