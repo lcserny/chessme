@@ -46,7 +46,7 @@ export abstract class Piece {
             let pos = positions.getPosition(advanced);
             if (pos != null) {
                 tryDirection = false;
-                if (pos.hasPiece() && pos.piece.color != this.color) {
+                if (pos.piece.color != this.color) {
                     results.push(advanced);
                 }
             } else {

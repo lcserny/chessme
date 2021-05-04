@@ -20,25 +20,25 @@ export class Pawn extends Piece {
         let advancedOne = locMove(current);
 
         let advancedOnePos = positions.getPosition(advancedOne);
-        if (advancedOnePos == null || !advancedOnePos.hasPiece()) {
+        if (advancedOnePos == null) {
             moves.push(advancedOne);
         }
 
         let advancedTwo = locMove(advancedOne);
         let advancedTwoPos = positions.getPosition(advancedTwo);
-        if (currentLocation.row == initRow && (advancedTwoPos == null || !advancedTwoPos.hasPiece())) {
+        if (currentLocation.row == initRow && (advancedTwoPos == null)) {
             moves.push(advancedTwo);
         }
 
         let advancedLeft = advancedOne.left();
         let advancedLeftPos = positions.getPosition(advancedLeft);
-        if (advancedLeftPos != null && advancedLeftPos.hasPiece() && advancedLeftPos.piece.color != this.color) {
+        if (advancedLeftPos != null && advancedLeftPos.piece.color != this.color) {
             moves.push(advancedLeft);
         }
 
         let advancedRight = advancedOne.right();
         let advancedRightPos = positions.getPosition(advancedRight);
-        if (advancedRightPos != null && advancedRightPos.hasPiece() && advancedRightPos.piece.color != this.color) {
+        if (advancedRightPos != null && advancedRightPos.piece.color != this.color) {
             moves.push(advancedRight);
         }
 

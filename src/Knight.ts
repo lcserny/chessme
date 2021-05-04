@@ -38,7 +38,7 @@ export class Knight extends Piece {
                 if (advancedTwoTurned != advanceTwo) {
                     let pos = positions.getPosition(advancedTwoTurned);
                     if (pos != null) {
-                        if (pos.hasPiece() && pos.piece.color != this.color) {
+                        if (pos.piece.color != this.color) {
                             results.push(advancedTwoTurned);
                         }
                     } else {

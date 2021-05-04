@@ -17,7 +17,7 @@ export class SimpleOutcomeEngine implements OutcomeEngine {
             let outcome = new Outcome();
             let sourcePosition = positions.getPosition(move.source);
             let targetPosition = positions.getPosition(move.target);
-            if (targetPosition != null && targetPosition.hasPiece() && targetPosition.piece.color != sourcePosition.piece.color) {
+            if (targetPosition != null && targetPosition.piece.color != sourcePosition.piece.color) {
                 outcome.defeatedPosition = targetPosition;
             }
             return outcome;
@@ -56,10 +56,6 @@ export class SimpleOutcomeEngine implements OutcomeEngine {
     private isMoveAllowed(positions: Positions, move: Move): boolean {
         let position = positions.getPosition(move.source);
         if (position == null) {
-            return false;
-        }
-
-        if (!position.hasPiece()) {
             return false;
         }
 

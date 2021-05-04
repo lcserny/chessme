@@ -1,7 +1,7 @@
 import {assert, expect} from "chai";
 import {describe, it} from "mocha";
 import {Board} from "../src/Board";
-import {Col, Location, Positions, Row} from "../src/Position";
+import {Col, Location, Row} from "../src/Position";
 import {Pawn} from "../src/Pawn";
 import {Rook} from "../src/Rook";
 import {Knight} from "../src/Knight";
@@ -9,10 +9,8 @@ import {Bishop} from "../src/Bishop";
 import {King} from "../src/King";
 import {Queen} from "../src/Queen";
 import {Color} from "../src/Player";
-import {OutcomeEngine, SimpleOutcomeEngine} from "../src/OutcomeEngine";
-import {Piece} from "../src/Piece";
+import {SimpleOutcomeEngine} from "../src/OutcomeEngine";
 import {Move} from "../src/Move";
-import {Outcome} from "../src/Outcome";
 import {getTwoPlayers, OutcomeEngineSpy} from "./common.test";
 import {ChessMeGame} from "../src/ChessMeGame";
 
@@ -139,5 +137,16 @@ describe("board setup", function () {
         assert.isNotNull(outcome.positions);
         expect(outcome.positions.length()).equals(32);
         expect(outcome.positions.getPosition(Location.from(Row.FOUR, Col.E)).piece.name).equals("Pawn");
+    });
+
+    it("board positions have fixed colors", function () {
+        let players = getTwoPlayers();
+        let game = new ChessMeGame(new Board(), players);
+
+        let outcome = game.move(players[0], new Move(Location.from(Row.TWO, Col.E), Location.from(Row.FOUR, Col.E)));
+        assert.equal(outcome.positions.getPosition(Location.from(Row.FOUR, Col.E)).location.color, Color.WHITE);
+
+        let outcome2 = game.move(players[1], new Move(Location.from(Row.EIGHT, Col.B), Location.from(Row.SIX, Col.C)));
+        assert.equal(outcome2.positions.getPosition(Location.from(Row.SIX, Col.C)).location.color, Color.WHITE);
     });
 });

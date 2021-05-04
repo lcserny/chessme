@@ -31,12 +31,50 @@ export enum Col {
 
 export class Location {
 
+    // FIXME
+    private static whiteBoardLocations: Array<Location> = [
+        Location.from(Row.ONE, Col.B),
+        Location.from(Row.ONE, Col.D),
+        Location.from(Row.ONE, Col.F),
+        Location.from(Row.ONE, Col.H),
+        Location.from(Row.TWO, Col.A),
+        Location.from(Row.TWO, Col.C),
+        Location.from(Row.TWO, Col.E),
+        Location.from(Row.TWO, Col.G),
+        Location.from(Row.THREE, Col.B),
+        Location.from(Row.THREE, Col.D),
+        Location.from(Row.THREE, Col.F),
+        Location.from(Row.THREE, Col.H),
+        Location.from(Row.FOUR, Col.A),
+        Location.from(Row.FOUR, Col.C),
+        Location.from(Row.FOUR, Col.E),
+        Location.from(Row.FOUR, Col.G),
+        Location.from(Row.FIVE, Col.B),
+        Location.from(Row.FIVE, Col.D),
+        Location.from(Row.FIVE, Col.F),
+        Location.from(Row.FIVE, Col.H),
+        Location.from(Row.SIX, Col.A),
+        Location.from(Row.SIX, Col.C),
+        Location.from(Row.SIX, Col.E),
+        Location.from(Row.SIX, Col.G),
+        Location.from(Row.SEVEN, Col.B),
+        Location.from(Row.SEVEN, Col.D),
+        Location.from(Row.SEVEN, Col.F),
+        Location.from(Row.SEVEN, Col.H),
+        Location.from(Row.EIGHT, Col.A),
+        Location.from(Row.EIGHT, Col.C),
+        Location.from(Row.EIGHT, Col.E),
+        Location.from(Row.EIGHT, Col.G),
+    ];
+
     private readonly _row: Row;
     private readonly _col: Col;
+    private readonly _color: Color;
 
     private constructor(row: Row, col: Col) {
         this._row = row;
         this._col = col;
+        this._color = this.produceLocationColor(this);
     }
 
     static from(row: Row, col: Col): Location {
@@ -49,6 +87,10 @@ export class Location {
 
     get col(): Col {
         return this._col;
+    }
+
+    get color(): Color {
+        return this._color;
     }
 
     up(): Location {
@@ -90,15 +132,21 @@ export class Location {
         let newCol = (<any>Col)[newColKey];
         return new Location(this.row, newCol);
     }
+
+    private produceLocationColor(location: Location): Color {
+        if (Location.whiteBoardLocations.indexOf(location) > -1) {
+            return Color.WHITE;
+        }
+        return Color.BLACK;
+    }
 }
 
 export class Position {
 
     private readonly _location: Location;
+    private readonly _piece: Piece;
 
-    private _piece: Piece;
-
-    constructor(location: Location, piece?: Piece) {
+    constructor(location: Location, piece: Piece) {
         this._location = location;
         this._piece = piece;
     }
@@ -109,14 +157,6 @@ export class Position {
 
     get piece(): Piece {
         return this._piece;
-    }
-
-    set piece(value: Piece) {
-        this._piece = value;
-    }
-
-    hasPiece(): boolean {
-        return this._piece != null;
     }
 }
 
@@ -170,7 +210,7 @@ export class Positions {
 
     findPositionOf(pieceClass: typeof Piece, color: Color): Position | null {
         for (let position of this._positions) {
-            if (position.hasPiece() && position.piece instanceof pieceClass && position.piece.color == color) {
+            if (position.piece instanceof pieceClass && position.piece.color == color) {
                 return position;
             }
         }
@@ -180,7 +220,7 @@ export class Positions {
     findAllPositionOf(color: Color): Array<Position> {
         let results = new Array<Position>();
         for (let position of this._positions) {
-            if (position.hasPiece()&& position.piece.color == color) {
+            if (position.piece.color == color) {
                 results.push(position);
             }
         }
