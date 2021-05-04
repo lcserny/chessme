@@ -4,7 +4,7 @@
   "description": "Chess game, my version",
   "main": "index.js",
   "scripts": {
-    "test": "mocha -r ts-node/register tests/**/*.test.ts",
+    "test": "env TS_NODE_PROJECT=\"tsconfig.testing.json\" mocha -r esm -r ts-node/register 'tests/**/*.test.ts'",
     "coverage": "nyc -r lcov -e .ts -x \"*.test.ts\" npm run test",
     "build": "webpack --mode=production",
     "build:dev": "webpack --mode=development",
@@ -22,6 +22,7 @@
     "@webpack-cli/generators": "^2.0.0",
     "chai": "^4.3.4",
     "css-loader": "^5.2.4",
+    "esm": "^3.2.25",
     "html-webpack-plugin": "^5.3.1",
     "mocha": "^8.3.2",
     "nyc": "^15.1.0",
