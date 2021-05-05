@@ -31,42 +31,6 @@ export enum Col {
 
 export class Location {
 
-    // FIXME
-    private static whiteBoardLocations: Array<Location> = [
-        Location.from(Row.ONE, Col.B),
-        Location.from(Row.ONE, Col.D),
-        Location.from(Row.ONE, Col.F),
-        Location.from(Row.ONE, Col.H),
-        Location.from(Row.TWO, Col.A),
-        Location.from(Row.TWO, Col.C),
-        Location.from(Row.TWO, Col.E),
-        Location.from(Row.TWO, Col.G),
-        Location.from(Row.THREE, Col.B),
-        Location.from(Row.THREE, Col.D),
-        Location.from(Row.THREE, Col.F),
-        Location.from(Row.THREE, Col.H),
-        Location.from(Row.FOUR, Col.A),
-        Location.from(Row.FOUR, Col.C),
-        Location.from(Row.FOUR, Col.E),
-        Location.from(Row.FOUR, Col.G),
-        Location.from(Row.FIVE, Col.B),
-        Location.from(Row.FIVE, Col.D),
-        Location.from(Row.FIVE, Col.F),
-        Location.from(Row.FIVE, Col.H),
-        Location.from(Row.SIX, Col.A),
-        Location.from(Row.SIX, Col.C),
-        Location.from(Row.SIX, Col.E),
-        Location.from(Row.SIX, Col.G),
-        Location.from(Row.SEVEN, Col.B),
-        Location.from(Row.SEVEN, Col.D),
-        Location.from(Row.SEVEN, Col.F),
-        Location.from(Row.SEVEN, Col.H),
-        Location.from(Row.EIGHT, Col.A),
-        Location.from(Row.EIGHT, Col.C),
-        Location.from(Row.EIGHT, Col.E),
-        Location.from(Row.EIGHT, Col.G),
-    ];
-
     private readonly _row: Row;
     private readonly _col: Col;
     private readonly _color: Color;
@@ -74,7 +38,7 @@ export class Location {
     private constructor(row: Row, col: Col) {
         this._row = row;
         this._col = col;
-        this._color = this.produceLocationColor(this);
+        this._color = LocationColorProducer.findColor(row, col);
     }
 
     static from(row: Row, col: Col): Location {
@@ -132,9 +96,47 @@ export class Location {
         let newCol = (<any>Col)[newColKey];
         return new Location(this.row, newCol);
     }
+}
 
-    private produceLocationColor(location: Location): Color {
-        if (Location.whiteBoardLocations.indexOf(location) > -1) {
+class LocationColorProducer {
+
+    private static whiteBoardLocations: Array<string> = [
+        `${Row.ONE}${Col.B}`,
+        `${Row.ONE}${Col.D}`,
+        `${Row.ONE}${Col.F}`,
+        `${Row.ONE}${Col.H}`,
+        `${Row.TWO}${Col.A}`,
+        `${Row.TWO}${Col.C}`,
+        `${Row.TWO}${Col.E}`,
+        `${Row.TWO}${Col.G}`,
+        `${Row.THREE}${Col.B}`,
+        `${Row.THREE}${Col.D}`,
+        `${Row.THREE}${Col.F}`,
+        `${Row.THREE}${Col.H}`,
+        `${Row.FOUR}${Col.A}`,
+        `${Row.FOUR}${Col.C}`,
+        `${Row.FOUR}${Col.E}`,
+        `${Row.FOUR}${Col.G}`,
+        `${Row.FIVE}${Col.B}`,
+        `${Row.FIVE}${Col.D}`,
+        `${Row.FIVE}${Col.F}`,
+        `${Row.FIVE}${Col.H}`,
+        `${Row.SIX}${Col.A}`,
+        `${Row.SIX}${Col.C}`,
+        `${Row.SIX}${Col.E}`,
+        `${Row.SIX}${Col.G}`,
+        `${Row.SEVEN}${Col.B}`,
+        `${Row.SEVEN}${Col.D}`,
+        `${Row.SEVEN}${Col.F}`,
+        `${Row.SEVEN}${Col.H}`,
+        `${Row.EIGHT}${Col.A}`,
+        `${Row.EIGHT}${Col.C}`,
+        `${Row.EIGHT}${Col.E}`,
+        `${Row.EIGHT}${Col.G}`,
+    ];
+
+    static findColor(row: Row, col: Col): Color {
+        if (LocationColorProducer.whiteBoardLocations.indexOf(`${row}${col}`) > -1) {
             return Color.WHITE;
         }
         return Color.BLACK;
