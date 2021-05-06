@@ -123,4 +123,15 @@ describe("game players", function () {
         expect(outcome.checkMate).to.be.true;
         expect(outcome.winner).equals(firstPlayer.color);
     });
+
+    it("new games have a session ID shared with the players joining", function () {
+        let players = getTwoPlayers();
+        let game = new ChessMeGame(new Board(), players);
+
+        let session = game.session;
+
+        assert.isNotNull(session);
+        expect(players[0].gameSession).equals(session);
+        expect(players[1].gameSession).equals(session);
+    });
 });

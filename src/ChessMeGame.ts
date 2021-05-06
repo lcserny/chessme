@@ -19,6 +19,7 @@ enum GameStatus {
 
 export class ChessMeGame {
 
+    private readonly _session: string;
     private readonly _board: Board;
     private readonly _players: Array<Player>;
 
@@ -26,15 +27,21 @@ export class ChessMeGame {
     private _playerToMove: Player;
 
     constructor(board: Board, players?: Array<Player>) {
+        this._session = null; // TODO: generate unique sessionId
         this._board = board;
         this._status = GameStatus.PENDING;
         this._players = players == null ? new Array<Player>() : players;
 
+        this.addSessionToPlayers();
         this.checkPlayerTeams();
     }
 
     get status(): string {
         return this._status;
+    }
+
+    get session(): string {
+        return this._session;
     }
 
     join(player: Player): void {
@@ -43,6 +50,7 @@ export class ChessMeGame {
             throw new TooManyPlayersError("Cannot join game, two players already present");
         }
         this._players.push(player);
+        this.addSessionToPlayers();
         this.checkPlayerTeams();
     }
 
@@ -81,6 +89,10 @@ export class ChessMeGame {
             throw new GameStatusError("Game already stopped");
         }
         this._status = GameStatus.STOPPED
+    }
+
+    private addSessionToPlayers(): void {
+
     }
 
     private checkPlayerNameExists(player: Player): void {

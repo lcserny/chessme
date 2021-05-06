@@ -18,10 +18,20 @@ export class Player {
     private readonly _color: Color;
     private readonly _moves: Array<Move>;
 
+    private _gameSession: string;
+
     constructor(name: string, color: Color) {
         this._name = name;
         this._moves = new Array<Move>();
         this._color = color;
+    }
+
+    get gameSession(): string {
+        return this._gameSession;
+    }
+
+    set gameSession(value: string) {
+        this._gameSession = value;
     }
 
     get color(): Color {
