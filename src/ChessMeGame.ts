@@ -1,15 +1,17 @@
-import {Player, Color} from "./Player";
+import {Color, Player} from "./Player";
 import {
     GameStatusError,
-    NoPlayersError, PlayerTurnError,
+    NoPlayersError,
     PlayerNameExistsError,
     PlayerNotInGameError,
+    PlayerTurnError,
     SamePlayerTeamError,
     TooManyPlayersError
 } from "./errors";
 import {Board} from "./Board";
 import {Outcome} from "./Outcome";
 import {Move} from "./Move";
+import {v4 as uuidv4} from 'uuid';
 
 enum GameStatus {
     STARTED = "started",
@@ -27,7 +29,7 @@ export class ChessMeGame {
     private _playerToMove: Player;
 
     constructor(board: Board, players?: Array<Player>) {
-        this._session = null; // TODO: generate unique sessionId
+        this._session = uuidv4();
         this._board = board;
         this._status = GameStatus.PENDING;
         this._players = players == null ? new Array<Player>() : players;
@@ -92,7 +94,9 @@ export class ChessMeGame {
     }
 
     private addSessionToPlayers(): void {
-
+        for (let player of this._players) {
+            player.gameSession = this._session;
+        }
     }
 
     private checkPlayerNameExists(player: Player): void {
