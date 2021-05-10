@@ -3,7 +3,7 @@ import {Board} from "./Board";
 import {Color, Player} from "./Player";
 import {Move} from "./Move";
 import {Col, Location, Row} from "./Position";
-import dgram from "dgram";
+import dgram, {RemoteInfo} from "dgram";
 
 let game = new ChessMeGame(new Board());
 let p1 = new Player("Player1", Color.WHITE);
@@ -26,12 +26,13 @@ console.log(p1.name + " captured " + p1CapturedPiece.name + " " + p1CapturedPiec
 
 // UDP broadcast server example
 let server = dgram.createSocket("udp4");
-server.on("error", function (err) {
+server.on("error", function (err: Error) {
     console.log("server error:n" + err.stack);
     server.close();
 });
-server.on("message", function (msg, rinfo) {
+server.on("message", function (msg: Buffer, rinfo: RemoteInfo) {
     console.log("server got: " + msg + " from " + rinfo.address + ":" + rinfo.port);
+    server.send(msg, 0, msg.length, rinfo.port, rinfo.address);
 });
 server.on("listening", function () {
     let address = server.address();
