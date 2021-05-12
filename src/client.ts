@@ -17,4 +17,5 @@ client.bind(51234, function () {
     client.setBroadcast(true);
 });
 let message = Buffer.from("Hi");
-client.send(message, 0, message.length, 41234, '255.255.255.255');
+// TODO: get subnet 192.168.100 automatically somehow? from Android there is a way
+client.send(message, 0, message.length, 41234, '192.168.100.255');
